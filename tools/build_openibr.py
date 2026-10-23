@@ -103,9 +103,9 @@ def build(source, output, compiler=None, commit=None):
     changed = [name for name, digest in original_hashes.items() if sha256(tree / name) != digest]
     if changed:
         raise ValueError(f"tracked sources changed during build: {changed}")
-    generated = {str(path.relative_to(tree)): sha256(path)
+    generated = {path.relative_to(tree).as_posix(): sha256(path)
                  for path in sorted(tree.rglob("*"))
-                 if path.is_file() and str(path.relative_to(tree)) not in original_hashes}
+                 if path.is_file() and path.relative_to(tree).as_posix() not in original_hashes}
     tool = compiler_identity(executable)
     tool["scope"] = "compiler invoked by this recorded build"
     receipt = {
