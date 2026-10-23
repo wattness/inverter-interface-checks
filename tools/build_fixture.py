@@ -60,7 +60,7 @@ def compile_fixture(output, mode="good", compiler=None, layout=False):
     command += [str(source), "-o", str(output)]
     if os.name != "nt":
         command.append("-lm")
-    result = subprocess.run(command, capture_output=True, timeout=30)
+    result = subprocess.run(command, capture_output=True, timeout=90)
     if result.returncode:
         raise ValueError(result.stderr.decode("utf-8", errors="replace"))
     if sources != {str(path.relative_to(ROOT)): sha256(path) for path in (source, header, types)}:
