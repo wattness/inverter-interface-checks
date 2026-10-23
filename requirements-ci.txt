@@ -1,0 +1,2 @@
+# Only the public OpenIBR header generators need this dependency.
+PyYAML==6.0.2

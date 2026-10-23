@@ -1,0 +1,5 @@
+include README.md AGENTS.md LICENSE
+recursive-include third_party *.h NOTICE *.md
+recursive-include skills SKILL.md
+recursive-include tests *.py *.c
+recursive-include tools *.py

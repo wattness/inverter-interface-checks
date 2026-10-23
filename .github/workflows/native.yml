@@ -1,0 +1,75 @@
+name: Native interface checks
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  native:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-24.04
+            architecture: x64
+          - os: macos-15
+            architecture: arm64
+          - os: windows-2022
+            architecture: x64
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.12'
+          architecture: ${{ matrix.architecture }}
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          repository: HeronPower/OpenIBR
+          ref: 5e2396cef8e57765c6a8fefe34fc379c3a60c163
+          path: upstream-original
+          persist-credentials: false
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          repository: wattness/OpenIBR
+          ref: 0489b0f2c5cea392f6b6b0743dae43a630732e58
+          path: upstream-fixed
+          persist-credentials: false
+      - name: Install generator dependency
+        run: python -m pip install --only-binary=:all: -r requirements-ci.txt
+      - name: Unix native checks
+        if: runner.os != 'Windows'
+        run: python -B tools/check_ci.py --original upstream-original --fixed upstream-fixed --output-dir ci-evidence --cc clang
+      - name: Windows x64 native checks
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
+          $installation = & $vswhere -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath
+          if ($LASTEXITCODE -ne 0 -or -not $installation) { throw "Visual Studio C tools unavailable" }
+          $vcvars = Join-Path $installation "VC\Auxiliary\Build\vcvars64.bat"
+          $environment = & $env:ComSpec /d /s /c ('""' + $vcvars + '" >nul && set"')
+          if ($LASTEXITCODE -ne 0) { throw "x64 compiler environment failed" }
+          foreach ($line in $environment) {
+            $parts = $line -split '=', 2
+            if ($parts.Length -eq 2 -and $parts[0]) {
+              [Environment]::SetEnvironmentVariable($parts[0], $parts[1], 'Process')
+            }
+          }
+          $env:CC = 'C:\Program Files\LLVM\bin\clang.exe'
+          if (-not (Test-Path $env:CC)) { throw "Native LLVM clang unavailable" }
+          python -B tools/check_ci.py --original upstream-original --fixed upstream-fixed --output-dir ci-evidence --cc $env:CC
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: always()
+        with:
+          name: native-${{ matrix.os }}
+          path: ci-evidence/
+          retention-days: 14
