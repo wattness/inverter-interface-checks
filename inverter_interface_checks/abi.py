@@ -5,6 +5,17 @@ See third_party/NOTICE.md for the source and license. No packing is applied.
 
 import ctypes as c
 import math
+import re
+import sys
+
+# Receipt identities also work from wheels, which omit the native source tree.
+PROBE_SOURCES = {
+    "tests/fixtures/abi_probe.c": "8edeb536d599fdfcf86174aa7f03853d2bb1fb63b353b86f1bfcfd56578fe9a4",
+    "third_party/openibr/IEEE_Cigre_DLLInterface.h":
+        "3b85aa4372f30c0a291cbe786c2a01a4caeaa22e78cda54ce8e7a112a3822631",
+    "third_party/openibr/IEEE_Cigre_DLLInterface_types.h":
+        "fed686063e1a021beb8aaae54cfdcaddccb34dc20743753d529e085f0f9b0a3e",
+}
 
 
 class Signal(c.Structure):
@@ -100,17 +111,117 @@ def union_value(value, datatype, char_signedness="unsupported"):
     return result
 
 
-def native_layout():
+def layout_of(item):
+    """Describe ctypes layout, rather than attest a producer library."""
     return {
-        item.__name__: {
-            "size": c.sizeof(item), "alignment": c.alignment(item),
-            "offsets": {name: getattr(item, name).offset for name, _ in item._fields_},
-        }
-        for item in (Signal, DefaultValue, MinMaxValue, Parameter, ModelInfo, Instance)
+        "size": c.sizeof(item), "alignment": c.alignment(item),
+        "offsets": {name: getattr(item, name).offset for name, _ in item._fields_},
+        "fields": {name: {"offset": getattr(item, name).offset,
+                          "size": c.sizeof(field_type), "alignment": c.alignment(field_type)}
+                   for name, field_type in item._fields_},
     }
 
 
-def read_metadata(library, char_signedness="unsupported"):
+def native_layout():
+    return {item.__name__: layout_of(item)
+            for item in (Signal, DefaultValue, MinMaxValue, Parameter, ModelInfo, Instance)}
+
+
+def mixed_probe_layouts():
+    rows = {
+        "MixedInputs": (True, [{"datatype": 3, "width": 1}, {"datatype": 9, "width": 3},
+                               {"datatype": 4, "width": 2}, {"datatype": 8, "width": 1}]),
+        "MixedOutputs": (True, [{"datatype": 8, "width": 2}, {"datatype": 3, "width": 1},
+                                {"datatype": 9, "width": 1}]),
+        "MixedParameters": (False, [{"datatype": 8}, {"datatype": 9}, {"datatype": 6},
+                                    {"datatype": 3}, {"datatype": 10}]),
+    }
+    return {name: layout_of(host_structure(name, fields, ports=ports))
+            for name, (ports, fields) in rows.items()}
+
+
+def compare_native_probe(observation, char_signedness="unsupported"):
+    """Compare the host-header observation, never a producer library's ABI.
+
+    OpenIBR uses int ABI fields/results. Its unused enum representations are
+    retained as observations; short-enum flags do not shrink those int fields.
+    """
+    mismatches = []
+
+    def exact(actual, expected):
+        if type(actual) is not type(expected):
+            return False
+        if isinstance(expected, dict):
+            return actual.keys() == expected.keys() and all(exact(actual[k], v) for k, v in expected.items())
+        if isinstance(expected, list):
+            return len(actual) == len(expected) and all(exact(a, b) for a, b in zip(actual, expected))
+        return actual == expected
+
+    def compare(path, actual, expected):
+        if not exact(actual, expected):
+            mismatches.append({"path": path, "native": actual, "ctypes": expected})
+
+    if not isinstance(observation, dict):
+        raise ValueError("native probe observation must be an object")
+    if char_signedness not in ("unsupported", "signed", "unsigned"):
+        raise ValueError("invalid char_signedness")
+    compare("schema", observation.get("schema"), "inverter-native-abi-observation/1")
+    compare("scope", observation.get("scope"), "host-header-software-probe")
+    compare("producer_library_attestation", observation.get("producer_library_attestation"), False)
+    compare("endianness", observation.get("endianness"), sys.byteorder)
+    compare("char_bits", observation.get("char_bits"), 8)
+    compare("datatype_ids", observation.get("datatype_ids"), list(range(1, 11)))
+    compare("float_representation", observation.get("float_representation"),
+            {"radix": 2, "float_mantissa_bits": 24, "double_mantissa_bits": 53})
+    native_scalars, native_aggregates = observation.get("scalars", {}), observation.get("aggregates", {})
+    if not isinstance(native_scalars, dict) or not isinstance(native_aggregates, dict):
+        raise ValueError("native probe scalars and aggregates must be objects")
+    enums = observation.get("enums")
+    for name in ("DataType", "ReturnValue"):
+        record = enums.get(name) if isinstance(enums, dict) else None
+        valid = (isinstance(record, dict) and set(record) == {"size", "alignment", "signedness"}
+                 and type(record["size"]) is int and record["size"] > 0
+                 and type(record["alignment"]) is int and record["alignment"] > 0
+                 and record["signedness"] in ("signed", "unsigned"))
+        if not valid:
+            mismatches.append({"path": f"enums/{name}", "native": record,
+                               "ctypes": "positive integer size/alignment and signed or unsigned"})
+    scalars = {"char": (c.c_char, None), "int8_t": (c.c_int8, "signed"),
+               "uint8_t": (c.c_uint8, "unsigned"), "int16_t": (c.c_int16, "signed"),
+               "uint16_t": (c.c_uint16, "unsigned"), "int32_t": (c.c_int32, "signed"),
+               "uint32_t": (c.c_uint32, "unsigned"), "int": (c.c_int, "signed"),
+               "long": (c.c_long, "signed"), "float": (c.c_float, "not-applicable"),
+               "double": (c.c_double, "not-applicable"), "pointer": (c.c_void_p, "not-applicable")}
+    for name, (scalar, signedness) in scalars.items():
+        actual = native_scalars.get(name, {})
+        if not isinstance(actual, dict):
+            raise ValueError("native scalar entries must be objects")
+        compare(f"scalars/{name}/size", actual.get("size"), c.sizeof(scalar))
+        compare(f"scalars/{name}/alignment", actual.get("alignment"), c.alignment(scalar))
+        if name == "char":
+            if actual.get("signedness") not in ("signed", "unsigned"):
+                mismatches.append({"path": "scalars/char/signedness", "native": actual.get("signedness"),
+                                   "ctypes": "signed or unsigned"})
+            if char_signedness != "unsupported":
+                signedness = char_signedness
+        if signedness:
+            compare(f"scalars/{name}/signedness", actual.get("signedness"), signedness)
+    compare("required/pointer-size", native_scalars.get("pointer", {}).get("size"), 8)
+    compare("required/int-size", native_scalars.get("int", {}).get("size"), 4)
+    for name, expected in {**native_layout(), **mixed_probe_layouts()}.items():
+        actual = native_aggregates.get(name, {})
+        if not isinstance(actual, dict):
+            raise ValueError("native aggregate entries must be objects")
+        for key in ("size", "alignment", "fields"):
+            compare(f"aggregates/{name}/{key}", actual.get(key), expected[key])
+    return {"matches": not mismatches, "mismatches": mismatches,
+            "scope": "host-header-software-probe", "producer_library_attestation": False,
+            "char_signedness_policy": char_signedness,
+            "enum_policy": "recorded; OpenIBR ABI fields and function returns use int"}
+
+
+def read_metadata(library, char_signedness="unsupported", *, name_syntax="nonempty",
+                  fixed_value_policy="nonzero"):
     get_info = library.Model_GetInfo
     get_info.argtypes = []
     get_info.restype = c.POINTER(ModelInfo)
@@ -145,6 +256,8 @@ def read_metadata(library, char_signedness="unsupported"):
             name, datatype = text_at(row.Name), row.DataType
             if not name or name in names or datatype not in SCALARS:
                 raise ValueError(f"invalid {key} name or datatype at index {index}")
+            if name_syntax == "c-identifier-ascii" and not re.fullmatch(r"[A-Za-z_][A-Za-z_0-9]*", name):
+                raise ValueError(f"invalid C identifier for {key} at index {index}")
             names.add(name)
             item = {"name": name, "datatype": datatype,
                     "description": text_at(row.Description), "unit": text_at(row.Unit)}
@@ -153,7 +266,10 @@ def read_metadata(library, char_signedness="unsupported"):
                     raise ValueError(f"invalid width for {name}")
                 item["width"] = row.Width
             else:
-                item.update(fixed=bool(row.FixedValue), group=text_at(row.GroupName),
+                if fixed_value_policy == "zero-or-one" and row.FixedValue not in (0, 1):
+                    raise ValueError(f"invalid FixedValue for {name} under zero-or-one policy")
+                item.update(fixed=bool(row.FixedValue), fixed_value=row.FixedValue,
+                            group=text_at(row.GroupName),
                             default=union_value(row.DefaultValue, datatype, char_signedness))
                 if datatype == 1:
                     item["char_signedness"] = char_signedness

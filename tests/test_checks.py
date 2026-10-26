@@ -136,6 +136,134 @@ class NativeChecks(unittest.TestCase):
         self.assertFalse(result["ok"])
         self.assertFalse(result["metadata_unchanged"])
 
+    def test_warning_dispatch_and_inactive_diagnostics(self):
+        defaults = {"id": "defaults", "kind": "valid"}
+        invalid = {"id": "nan", "kind": "invalid", "index": 0, "value": "nan"}
+        result = self.probe("warning", defaults)
+        self.assertTrue(result["ok"], result)
+        call = result["calls"][0]
+        self.assertEqual(call["return_code"], 1)
+        self.assertEqual(call["diagnostic_channel"], "general")
+        self.assertEqual(call["general_message"], "Software warning")
+        self.assertIsNone(call["error_message"])
+        self.assertTrue(call["error_pointer_present"])
+        self.assertFalse(self.probe("warning-message", defaults)["ok"])
+        for mode, case in (("inactive-error", defaults), ("inactive-general", invalid)):
+            with self.subTest(mode=mode):
+                result = self.probe(mode, case)
+                self.assertTrue(result["ok"], result)
+                self.assertEqual(result["execution"], "completed")
+        result = self.probe("inactive-unknown", defaults)
+        self.assertFalse(result["ok"])
+        self.assertEqual(result["execution"], "completed")
+        self.assertIsNone(result["calls"][0]["diagnostic_channel"])
+        self.assertIsNone(result["calls"][0]["error_message"])
+        self.assertIsNone(result["calls"][0]["general_message"])
+
+    def test_stale_pointer_clear_policy_uses_presence(self):
+        adapter = load_adapter("ieee-cigre-1.1")[0]
+        adapter["clear_error_on_success"] = True
+        result = self.probe("inactive-error", {"id": "defaults", "kind": "valid"}, adapter)
+        self.assertFalse(result["ok"])
+        self.assertEqual(result["execution"], "completed")
+        self.assertIn("success_error_cleared", [check["check"] for check in result["calls"][0]["checks"]
+                                              if not check["ok"]])
+
+    def test_instance_boundary_is_guarded(self):
+        result = self.probe("instance-overrun", {"id": "defaults", "kind": "valid"})
+        self.assertFalse(result["ok"])
+        self.assertIn("Instance/guards", [check["check"] for check in result["calls"][0]["checks"]
+                                         if not check["ok"]])
+
+    def test_retry_policy_and_distinct_diagnostics(self):
+        invalid = {"id": "nan", "kind": "invalid", "index": 0, "value": "nan"}
+        result = self.probe("inactive-error", invalid)
+        self.assertTrue(result["ok"], result)
+        self.assertEqual(len(result["calls"]), 2)
+        self.assertEqual(result["calls"][0]["error_message"], "Software parameter rejected")
+        self.assertIsNone(result["calls"][1]["error_message"])
+        adapter = load_adapter("ieee-cigre-1.1")[0]
+        adapter["recheck_policy"] = "none"
+        result = self.probe("retry-error", invalid, adapter)
+        self.assertTrue(result["ok"], result)
+        self.assertEqual(len(result["calls"]), 1)
+        result = self.probe("retry-error", invalid)
+        self.assertFalse(result["ok"])
+        self.assertEqual([call["error_message"] for call in result["calls"]],
+                         ["Software parameter rejected", "Different retry error"])
+
+    def test_numeric_normalization_preserves_other_bytes(self):
+        defaults = {"id": "defaults", "kind": "valid"}
+        self.assertFalse(self.probe("normalization", defaults)["ok"])
+        adapter = load_adapter("ieee-cigre-1.1")[0]
+        adapter["parameter_mutation"] = "allow-normalization"
+        result = self.probe("normalization", defaults, adapter)
+        self.assertTrue(result["ok"], result)
+        self.assertEqual(result["calls"][0]["parameter_mutations"][0]["parameter"], "count")
+        invalid = {"id": "nan", "kind": "invalid", "index": 0, "value": "nan"}
+        for mode, case in (("parameter-padding", defaults), ("parameter-pointer", defaults),
+                           ("input-write", defaults), ("overrun", defaults),
+                           ("parameter-write", invalid)):
+            with self.subTest(mode=mode):
+                self.assertFalse(self.probe(mode, case, adapter)["ok"])
+
+    def test_raw_fixed_value_and_identifier_profiles(self):
+        result = self.probe("fixed-value")
+        self.assertTrue(result["ok"], result)
+        self.assertEqual(result["metadata"]["parameters"][2]["fixed_value"], 7)
+        self.assertTrue(result["metadata"]["parameters"][2]["fixed"])
+        adapter = load_adapter("ieee-cigre-1.1")[0]
+        adapter["fixed_value_policy"] = "zero-or-one"
+        self.assertFalse(self.probe("fixed-value", adapter=adapter)["ok"])
+        self.assertFalse(self.probe("identifier")["ok"])
+        adapter["name_syntax"] = "nonempty"
+        self.assertTrue(self.probe("identifier", adapter=adapter)["ok"])
+
+    def test_normalized_values_follow_selected_contract(self):
+        defaults = {"id": "defaults", "kind": "valid"}
+        adapter = load_adapter("ieee-cigre-1.1")[0]
+        adapter["parameter_mutation"] = "allow-normalization"
+        for mode, finding in (("normalization-bounds", "parameter[2]/normalized_bounds"),
+                              ("normalization-nan", "parameter[1]/normalized_finite"),
+                              ("normalization-inf", "parameter[1]/normalized_finite")):
+            with self.subTest(mode=mode):
+                result = self.probe(mode, defaults, adapter)
+                self.assertFalse(result["ok"], result)
+                self.assertEqual(result["execution"], "completed")
+                self.assertTrue(result["calls"][0]["parameter_mutations"])
+                self.assertIn(finding, [check["check"] for check in result["calls"][0]["checks"]
+                                        if not check["ok"]])
+        adapter["bounds"] = "skip"
+        self.assertTrue(self.probe("normalization-bounds", defaults, adapter)["ok"])
+        self.assertFalse(self.probe("normalization-nan", defaults, adapter)["ok"])
+        adapter["nonfinite"] = "skip"
+        self.assertTrue(self.probe("normalization-nan", defaults, adapter)["ok"])
+        adapter["bounds"] = "inclusive"
+        self.assertFalse(self.probe("normalization-nan", defaults, adapter)["ok"])
+
+    def test_normalization_uses_declared_char_signedness(self):
+        defaults = {"id": "defaults", "kind": "valid", "index": 3, "value": -2}
+        adapter = load_adapter("ieee-cigre-1.1")[0]
+        adapter.update(parameter_mutation="allow-normalization", char_signedness="signed")
+        self.assertTrue(self.probe("signed-char", defaults, adapter)["ok"])
+
+    def test_excluded_probe_policies_are_reported(self):
+        adapter = load_adapter("ieee-cigre-1.1")[0]
+        adapter["nonfinite"] = "skip"
+        path = self.directory / "skip-nonfinite.json"
+        path.write_text(json.dumps(adapter), encoding="utf-8")
+        report = self.report("nan", str(path))
+        self.assertTrue(report["summary"]["ok"], render_text(report))
+        self.assertEqual(report["summary"]["cases_executed"], 18)
+        self.assertTrue(any("nonfinite probes excluded" in row["reason"] for row in report["skipped"]))
+        adapter["bounds"] = "skip"
+        path = self.directory / "skip-bounds.json"
+        path.write_text(json.dumps(adapter), encoding="utf-8")
+        report = self.report("bounds", str(path))
+        self.assertTrue(report["summary"]["ok"], render_text(report))
+        self.assertEqual(report["summary"]["cases_executed"], 3)
+        self.assertTrue(any("bounds probes excluded" in row["reason"] for row in report["skipped"]))
+
     def test_crash_timeout_and_output_bounds(self):
         case = {"id": "defaults", "kind": "valid"}
         for mode in ("crash", "timeout", "output-limit", "fast-output"):
@@ -244,6 +372,35 @@ class Contracts(unittest.TestCase):
             path.write_text(json.dumps(adapter), encoding="utf-8")
             with self.assertRaisesRegex(ValueError, "unknown fields"):
                 load_adapter(str(path))
+
+    def test_adapter_return_types_and_policy_values(self):
+        adapter = load_adapter("ieee-cigre-1.1")[0]
+        invalid = [("valid_returns", [False]), ("valid_returns", [0.0]),
+                   ("valid_returns", [0, True]), ("invalid_return", 2.0),
+                   ("null_instance_return", 2.0), ("null_parameters_return", 2.0),
+                   ("recheck_policy", True), ("parameter_mutation", "anything"),
+                   ("nonfinite", None), ("name_syntax", "unicode"),
+                   ("fixed_value_policy", []), ("bounds", "exclusive"),
+                   ("expected_model_name", [])]
+        with tempfile.TemporaryDirectory() as temporary:
+            path = Path(temporary) / "adapter.json"
+            for key, value in invalid:
+                with self.subTest(key=key, value=value):
+                    path.write_text(json.dumps({**adapter, key: value}), encoding="utf-8")
+                    with self.assertRaises(ValueError):
+                        load_adapter(str(path))
+
+    def test_legacy_adapter_defaults_are_preserved(self):
+        from inverter_interface_checks.contracts import POLICY_DEFAULTS
+        adapter = load_adapter("ieee-cigre-1.1")[0]
+        for key in POLICY_DEFAULTS:
+            adapter.pop(key)
+        with tempfile.TemporaryDirectory() as temporary:
+            path = Path(temporary) / "adapter.json"
+            path.write_text(json.dumps(adapter), encoding="utf-8")
+            resolved = load_adapter(str(path))[0]
+        for key, expected in POLICY_DEFAULTS.items():
+            self.assertEqual(resolved[key], expected)
 
 
 if __name__ == "__main__":

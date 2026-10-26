@@ -58,7 +58,8 @@ class Host:
         ):
             count = metadata["states"][count_name]
             self.buffers[field] = GuardedBuffer(scalar * count)
-        self.instance = abi.Instance()
+        self.instance_buffer = GuardedBuffer(abi.Instance)
+        self.instance = self.instance_buffer.body
         for field, buffer in self.buffers.items():
             setattr(self.instance, field, buffer.pointer)
         self.instance.SimTool_EMT_RMS_Mode = 1 if metadata["mode"] in (1, 3) else 2
@@ -89,29 +90,69 @@ class Host:
         snapshots = {name: buffer.snapshot() for name, buffer in protected.items()}
         instance_bytes = self.stable_instance_bytes()
         returned = check(None if kind == "null_instance" else c.byref(self.instance))
-        error = abi.text_at(self.instance.LastErrorMessage)
-        general = abi.text_at(self.instance.LastGeneralMessage)
+        passed_instance = kind != "null_instance"
+        error_pointer = bool(self.instance.LastErrorMessage) if passed_instance else None
+        general_pointer = bool(self.instance.LastGeneralMessage) if passed_instance else None
+        channel = "error" if returned == 2 else "general" if returned == 1 else None
+        error = (abi.text_at(self.instance.LastErrorMessage)
+                 if passed_instance and channel == "error" else None)
+        general = (abi.text_at(self.instance.LastGeneralMessage)
+                   if passed_instance and channel == "general" else None)
         expected = (adapter[f"{kind}_return"] if kind.startswith("null_")
                     else adapter["invalid_return"] if kind == "invalid" else adapter["valid_returns"])
         checks = [{"check": "return_code", "ok": returned in expected if isinstance(expected, list)
                    else returned == expected}]
         message_required = ((kind == "invalid" and adapter["invalid_message"])
                             or (kind == "null_parameters" and adapter["null_parameters_message"]))
-        if message_required:
+        if message_required and returned == 2:
             checks.append({"check": "error_message", "ok": bool(error and error.strip())})
         if returned == 1:
             checks.append({"check": "general_message", "ok": bool(general and general.strip())})
-        if kind == "valid" and adapter["clear_error_on_success"]:
-            checks.append({"check": "success_error_cleared", "ok": not error})
+        if kind == "valid" and returned in (0, 1) and adapter["clear_error_on_success"]:
+            checks.append({"check": "success_error_cleared", "ok": not error_pointer})
+        mutations = []
         for name, buffer in protected.items():
-            checks.extend([
-                {"check": f"{name}/guards", "ok": buffer.intact()},
-                {"check": f"{name}/unchanged", "ok": buffer.snapshot() == snapshots[name]},
-            ])
+            after = buffer.snapshot()
+            checks.append({"check": f"{name}/guards", "ok": buffer.intact()})
+            normalization = (name == "Parameters" and returned in (0, 1)
+                             and adapter.get("parameter_mutation", "forbid") == "allow-normalization")
+            if normalization:
+                before_protected, after_protected = bytearray(snapshots[name]), bytearray(after)
+                structure = type(buffer.body)
+                for index, row in enumerate(self.metadata["parameters"]):
+                    if row["datatype"] == 10:
+                        continue
+                    field = getattr(structure, f"field_{index}")
+                    start, end = field.offset, field.offset + field.size
+                    if snapshots[name][start:end] != after[start:end]:
+                        mutations.append({"parameter": row["name"], "index": index,
+                                          "before_hex": snapshots[name][start:end].hex(),
+                                          "after_hex": after[start:end].hex(),
+                                          "policy": "allow-normalization"})
+                    value = getattr(buffer.body, f"field_{index}")
+                    if row["datatype"] == 1:
+                        value = value[0]
+                        if row["char_signedness"] == "signed" and value >= 128:
+                            value -= 256
+                    # Permission to normalize does not waive the selected value contract.
+                    if adapter.get("nonfinite", "reject") == "reject":
+                        checks.append({"check": f"parameter[{index}]/normalized_finite",
+                                       "ok": math.isfinite(value)})
+                    if adapter["bounds"] == "inclusive":
+                        checks.append({"check": f"parameter[{index}]/normalized_bounds",
+                                       "ok": row["minimum"] <= value <= row["maximum"]})
+                    before_protected[start:end] = after_protected[start:end] = b"\0" * field.size
+                checks.append({"check": "Parameters/protected_bytes_unchanged",
+                               "ok": before_protected == after_protected})
+            else:
+                checks.append({"check": f"{name}/unchanged", "ok": after == snapshots[name]})
+        checks.append({"check": "Instance/guards", "ok": self.instance_buffer.intact()})
         checks.append({"check": "instance_fields_unchanged",
                        "ok": self.stable_instance_bytes() == instance_bytes})
         return {"kind": kind, "return_code": returned, "error_message": error,
-                "general_message": general, "checks": checks}
+                "general_message": general, "diagnostic_channel": channel if passed_instance else None,
+                "error_pointer_present": error_pointer, "general_pointer_present": general_pointer,
+                "parameter_mutations": mutations, "checks": checks}
 
     def stable_instance_bytes(self):
         data = bytearray(c.string_at(c.addressof(self.instance), c.sizeof(self.instance)))
@@ -131,12 +172,19 @@ def check_case(library, metadata, case, adapter):
     if case["kind"] == "null_parameters":
         host.instance.Parameters = None
     calls = [host.observe_call(check, case["kind"], adapter)]
-    if case["kind"] == "invalid":
+    if case["kind"] == "invalid" and adapter.get("recheck_policy", "same-instance") == "same-instance":
         host.defaults()
         calls.append(host.observe_call(check, "valid", adapter))
-    unchanged = abi.read_metadata(library, adapter["char_signedness"]) == metadata
+    unchanged = read_metadata(library, adapter) == metadata
     return {"ok": unchanged and all(check["ok"] for call in calls for check in call["checks"]),
-            "calls": calls, "metadata_unchanged": unchanged}
+            "calls": calls, "metadata_unchanged": unchanged,
+            "recheck_policy": adapter.get("recheck_policy", "same-instance")}
+
+
+def read_metadata(library, adapter):
+    return abi.read_metadata(library, adapter["char_signedness"],
+                             name_syntax=adapter.get("name_syntax", "nonempty"),
+                             fixed_value_policy=adapter.get("fixed_value_policy", "nonzero"))
 
 
 def run(request):
@@ -152,10 +200,11 @@ def run(request):
     missing = [name for name in EXPORTS if not hasattr(library, name)]
     if missing:
         return {"ok": False, "detail": "missing exports", "missing_exports": missing}
-    metadata = abi.read_metadata(library, request["adapter"]["char_signedness"])
+    metadata = read_metadata(library, request["adapter"])
     check_expectations(metadata, request["adapter"])
     if request["action"] == "metadata":
         result = {"ok": True, "metadata": metadata, "native_layout": abi.native_layout(),
+                  "native_layout_scope": "ctypes declarations; not producer-library attestation",
                   "host_layouts": abi.host_layouts(metadata)}
     else:
         if metadata != request["metadata"]:

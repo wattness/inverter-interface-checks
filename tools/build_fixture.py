@@ -28,6 +28,11 @@ MODES = {
     "metadata-nan": 26, "port-width": 27, "duplicate-name": 28,
     "interface-version": 29, "text-encoding": 30,
     "fast-output": 31,
+    "warning": 32, "warning-message": 33, "instance-overrun": 34,
+    "inactive-error": 35, "inactive-general": 36, "inactive-unknown": 37,
+    "identifier": 38, "fixed-value": 39, "normalization": 40,
+    "parameter-padding": 41, "parameter-pointer": 42, "retry-error": 43,
+    "normalization-bounds": 44, "normalization-nan": 45, "normalization-inf": 46,
 }
 
 
@@ -42,7 +47,7 @@ def compile_fixture(output, mode="good", compiler=None, layout=False):
     source = ROOT / "tests" / "fixtures" / "contract_model.c"
     header = ROOT / "third_party" / "openibr" / "IEEE_Cigre_DLLInterface.h"
     types = header.with_name("IEEE_Cigre_DLLInterface_types.h")
-    sources = {str(path.relative_to(ROOT)): sha256(path) for path in (source, header, types)}
+    sources = {path.relative_to(ROOT).as_posix(): sha256(path) for path in (source, header, types)}
     command = [resolved, "-std=c99", "-Wall", "-Wextra", "-Werror", "-O2",
                f"-DFIXTURE_MODE={MODES[mode]}", "-I", str(header.parent)]
     if mode == "unsigned-char":
@@ -63,7 +68,7 @@ def compile_fixture(output, mode="good", compiler=None, layout=False):
     result = subprocess.run(command, capture_output=True, timeout=90)
     if result.returncode:
         raise ValueError(result.stderr.decode("utf-8", errors="replace"))
-    if sources != {str(path.relative_to(ROOT)): sha256(path) for path in (source, header, types)}:
+    if sources != {path.relative_to(ROOT).as_posix(): sha256(path) for path in (source, header, types)}:
         raise ValueError("source changed during compilation")
     return {
         "schema": "inverter-fixture-build/1", "scope": "software fixture",

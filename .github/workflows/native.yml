@@ -16,10 +16,16 @@ jobs:
         include:
           - os: ubuntu-24.04
             architecture: x64
+            expected_system: Linux
+            expected_machine: x86_64
           - os: macos-15
             architecture: arm64
+            expected_system: Darwin
+            expected_machine: arm64
           - os: windows-2022
             architecture: x64
+            expected_system: Windows
+            expected_machine: AMD64
     runs-on: ${{ matrix.os }}
     timeout-minutes: 15
     steps:
@@ -46,7 +52,7 @@ jobs:
         run: 'python -m pip install --only-binary=:all: -r requirements-ci.txt'
       - name: Unix native checks
         if: runner.os != 'Windows'
-        run: python -B tools/check_ci.py --original upstream-original --fixed upstream-fixed --output-dir ci-evidence --cc clang
+        run: python -B tools/check_ci.py --original upstream-original --fixed upstream-fixed --output-dir ci-evidence --cc clang --expected-system ${{ matrix.expected_system }} --expected-machine ${{ matrix.expected_machine }}
       - name: Windows x64 native checks
         if: runner.os == 'Windows'
         shell: pwsh
@@ -65,7 +71,7 @@ jobs:
           }
           $env:CC = 'C:\Program Files\LLVM\bin\clang.exe'
           if (-not (Test-Path $env:CC)) { throw "Native LLVM clang unavailable" }
-          python -B tools/check_ci.py --original upstream-original --fixed upstream-fixed --output-dir ci-evidence --cc $env:CC
+          python -B tools/check_ci.py --original upstream-original --fixed upstream-fixed --output-dir ci-evidence --cc $env:CC --expected-system ${{ matrix.expected_system }} --expected-machine ${{ matrix.expected_machine }}
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()

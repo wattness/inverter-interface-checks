@@ -42,7 +42,7 @@ static IEEE_Cigre_DLLInterface_Parameter parameters[] = {
       { .Real32_Val = 1.0f }, { .Real32_Val = -2.0f }, { .Real32_Val = 2.0f } },
     { "tau", "Software", "Float64 parameter", "", 9, 0,
       { .Real64_Val = 2.5 }, { .Real64_Val = 0.1 }, { .Real64_Val = 20.0 } },
-    { "count", "Software", "Signed integer parameter", "", 6, 0,
+    { "count", "Software", "Signed integer parameter", "", 6, FIXTURE_MODE == 50,
       { .Int32_Val = 3 }, { .Int32_Val = 0 }, { .Int32_Val = 7 } },
 #if FIXTURE_MODE == 21
     { "flag", "Software", "Signed char parameter", "", 1, 0,
@@ -93,6 +93,12 @@ const IEEE_Cigre_DLLInterface_Model_Info * MODEL_CALL Model_GetInfo(void) {
     info.DLLInterfaceVersion[0] = 2;
 #elif FIXTURE_MODE == 30
     info.ModelName = "\xff";
+#elif FIXTURE_MODE == 38
+    parameters[0].Name = "bad-name";
+#elif FIXTURE_MODE == 39
+    parameters[2].FixedValue = 7;
+#elif FIXTURE_MODE == 49
+    parameters[2].FixedValue = -1;
 #endif
     return &info;
 }
@@ -100,6 +106,11 @@ const IEEE_Cigre_DLLInterface_Model_Info * MODEL_CALL Model_GetInfo(void) {
 int MODEL_CALL Model_CheckParameters(IEEE_Cigre_DLLInterface_Instance *instance) {
     Parameters *p;
     int invalid;
+#if FIXTURE_MODE == 43
+    static int calls = 0;
+#elif FIXTURE_MODE == 48
+    static char diagnostic[96];
+#endif
     if (!instance) return 2;
 #if FIXTURE_MODE != 8
     instance->LastErrorMessage = NULL;
@@ -151,27 +162,85 @@ int MODEL_CALL Model_CheckParameters(IEEE_Cigre_DLLInterface_Instance *instance)
     ((unsigned char *)instance->FloatStates)[sizeof(float)] ^= 1;
 #elif FIXTURE_MODE == 20
     ((unsigned char *)instance)[offsetof(IEEE_Cigre_DLLInterface_Instance, SimTool_EMT_RMS_Mode) + 1] ^= 1;
+#elif FIXTURE_MODE == 34
+    ((unsigned char *)instance)[sizeof(*instance)] ^= 1;
+#elif FIXTURE_MODE == 47
+    ((unsigned char *)instance)[-1] ^= 1;
+#elif FIXTURE_MODE == 50
+    fprintf(stderr, "fixed_value_before:%d\n", parameters[2].FixedValue);
+    parameters[2].FixedValue = 2;
+    fprintf(stderr, "fixed_value_after:%d\n", parameters[2].FixedValue);
+#elif FIXTURE_MODE == 41
+    ((unsigned char *)p)[offsetof(Parameters, alpha) + sizeof(p->alpha)] ^= 1;
+#elif FIXTURE_MODE == 42
+    p->label = "replaced string pointer";
+#endif
+#if FIXTURE_MODE == 43
+    if (++calls > 1) {
+        instance->LastErrorMessage = "Different retry error";
+        return 2;
+    }
 #endif
     if (invalid) {
-#if FIXTURE_MODE != 4
+#if FIXTURE_MODE == 48
+        snprintf(diagnostic, sizeof(diagnostic), "First rejection in shared storage");
+        instance->LastErrorMessage = diagnostic;
+        fprintf(stderr, "diagnostic_storage:%p\n", (void *)diagnostic);
+#elif FIXTURE_MODE != 4
         instance->LastErrorMessage = "Software parameter rejected";
+#endif
+#if FIXTURE_MODE == 36
+        instance->LastGeneralMessage = (const char *)(uintptr_t)1;
 #endif
         return 2;
     }
 #if FIXTURE_MODE == 3
     return 7;
+#elif FIXTURE_MODE == 37
+    instance->LastErrorMessage = (const char *)(uintptr_t)1;
+    instance->LastGeneralMessage = (const char *)(uintptr_t)1;
+    return 7;
+#elif FIXTURE_MODE == 35
+    instance->LastErrorMessage = (const char *)(uintptr_t)1;
+    return 0;
+#elif FIXTURE_MODE == 32
+    instance->LastErrorMessage = (const char *)(uintptr_t)1;
+    instance->LastGeneralMessage = "Software warning";
+    return 1;
+#elif FIXTURE_MODE == 33
+    return 1;
+#elif FIXTURE_MODE == 40
+    p->count = 0;
+    instance->LastGeneralMessage = "Parameter normalized";
+    return 1;
+#elif FIXTURE_MODE == 44
+    p->count = 8;
+    instance->LastGeneralMessage = "Parameter normalized above maximum";
+    return 1;
+#elif FIXTURE_MODE == 45
+    p->tau = NAN;
+    instance->LastGeneralMessage = "Parameter normalized to NaN";
+    return 1;
+#elif FIXTURE_MODE == 46
+    p->tau = INFINITY;
+    return 0;
+#elif FIXTURE_MODE == 48
+    snprintf(diagnostic, sizeof(diagnostic), "Replacement text in shared storage");
+    instance->LastGeneralMessage = diagnostic;
+    fprintf(stderr, "diagnostic_storage:%p\n", (void *)diagnostic);
+    return 1;
 #else
     return 0;
 #endif
 }
 
-int MODEL_CALL Model_FirstCall(IEEE_Cigre_DLLInterface_Instance *instance) { (void)instance; return 0; }
-int MODEL_CALL Model_PrintInfo(void) { return 0; }
-int MODEL_CALL Model_Initialize(IEEE_Cigre_DLLInterface_Instance *instance) { (void)instance; return 0; }
-int MODEL_CALL Model_Outputs(IEEE_Cigre_DLLInterface_Instance *instance) { (void)instance; return 0; }
-int MODEL_CALL Model_Iterate(IEEE_Cigre_DLLInterface_Instance *instance) { (void)instance; return 0; }
+int MODEL_CALL Model_FirstCall(IEEE_Cigre_DLLInterface_Instance *instance) { (void)instance; raise(SIGABRT); return 0; }
+int MODEL_CALL Model_PrintInfo(void) { raise(SIGABRT); return 0; }
+int MODEL_CALL Model_Initialize(IEEE_Cigre_DLLInterface_Instance *instance) { (void)instance; raise(SIGABRT); return 0; }
+int MODEL_CALL Model_Outputs(IEEE_Cigre_DLLInterface_Instance *instance) { (void)instance; raise(SIGABRT); return 0; }
+int MODEL_CALL Model_Iterate(IEEE_Cigre_DLLInterface_Instance *instance) { (void)instance; raise(SIGABRT); return 0; }
 #if FIXTURE_MODE != 10
-int MODEL_CALL Model_Terminate(IEEE_Cigre_DLLInterface_Instance *instance) { (void)instance; return 0; }
+int MODEL_CALL Model_Terminate(IEEE_Cigre_DLLInterface_Instance *instance) { (void)instance; raise(SIGABRT); return 0; }
 #endif
 
 #ifdef PRINT_LAYOUT

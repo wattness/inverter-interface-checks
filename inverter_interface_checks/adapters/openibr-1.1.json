@@ -7,7 +7,15 @@
   "parameter_check_setup": "none",
   "char_signedness": "unsupported",
   "bounds": "inclusive",
-  "valid_returns": [0, 1],
+  "recheck_policy": "same-instance",
+  "parameter_mutation": "forbid",
+  "nonfinite": "reject",
+  "name_syntax": "nonempty",
+  "fixed_value_policy": "nonzero",
+  "valid_returns": [
+    0,
+    1
+  ],
   "invalid_return": 2,
   "invalid_message": true,
   "clear_error_on_success": false,
@@ -16,8 +24,17 @@
   "null_parameters_message": false,
   "expected_model_name": "GFM_Battery_OpenIBR",
   "expected_parameters": [
-    {"name": "H", "datatype": 9},
-    {"name": "D", "datatype": 9},
-    {"name": "kDroop", "datatype": 9}
+    {
+      "name": "H",
+      "datatype": 9
+    },
+    {
+      "name": "D",
+      "datatype": 9
+    },
+    {
+      "name": "kDroop",
+      "datatype": 9
+    }
   ]
 }

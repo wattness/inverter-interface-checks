@@ -10,6 +10,7 @@ import time
 from pathlib import Path
 
 from . import __version__
+from .abi import PROBE_SOURCES, compare_native_probe
 from .contracts import load_adapter, plan_cases
 from .process import run_worker, sha256
 
@@ -19,7 +20,7 @@ def compiler_identity(executable):
     if not resolved:
         raise ValueError(f"compiler not found: {executable}")
     completed = subprocess.run([resolved, "--version"], capture_output=True,
-                               timeout=5, check=True)
+                               timeout=30, check=True)
     return {"name": Path(resolved).name, "sha256": sha256(resolved),
             "version": completed.stdout[:4096].decode("utf-8", errors="replace"),
             "scope": "local tool probe; does not establish the library's build compiler"}
@@ -54,6 +55,8 @@ def parser():
     result.add_argument("--compiler", help="record the local compiler's version and executable hash")
     result.add_argument("--build-receipt", type=Path,
                         help="attach a fixture build receipt matching the library hash")
+    result.add_argument("--abi-probe", type=Path,
+                        help="check a supplied native host-header probe before loading the library")
     result.add_argument("--format", choices=("text", "json"), default="text")
     result.add_argument("--output", type=Path, help="write JSON to a new file")
     result.add_argument("--version", action="version", version=__version__)
@@ -69,7 +72,7 @@ def inspect(args):
     identity = {
         "library": {"name": library.name, "sha256": library_hash},
         "adapter": {"id": adapter["id"], "name": adapter_path.name,
-                    "sha256": hashlib.sha256(adapter_data).hexdigest()},
+                    "sha256": hashlib.sha256(adapter_data).hexdigest(), "resolved_policy": adapter},
         "sources": [{"name": source.name, "sha256": sha256(source)} for source in args.source],
         "source_scope": "explicitly supplied files; source-to-library correspondence is unverified",
         "host": {"os": platform.system(), "architecture": platform.machine(),
@@ -93,17 +96,42 @@ def inspect(args):
         identity["build_receipt"] = receipt
         identity["build_receipt_sha256"] = sha256(args.build_receipt)
         identity["build_receipt_scope"] = "supplied record with matching library hash; not independent attestation"
+    probe_path = getattr(args, "abi_probe", None)
+    identity["layout_evidence"] = "ctypes declarations only; producer library ABI unverified"
+    if probe_path:
+        data = probe_path.read_bytes()
+        if len(data) > 131072:
+            raise ValueError("ABI probe receipt exceeds 128 KiB")
+        probe = json.loads(data)
+        if (not isinstance(probe, dict) or probe.get("schema") != "inverter-native-abi-probe-build/1"
+                or probe.get("scope") != "host-header-software-probe"
+                or probe.get("producer_library_attestation") is not False):
+            raise ValueError("unsupported ABI probe receipt")
+        if type(probe.get("probe_exit_code")) is not int or probe["probe_exit_code"] != 0:
+            raise ValueError("ABI probe receipt does not record successful execution")
+        if probe.get("sources") != PROBE_SOURCES:
+            raise ValueError("ABI probe source identities do not match this checker")
+        host = probe.get("host")
+        if (not isinstance(host, dict) or host.get("os") != platform.system()
+                or host.get("architecture") != platform.machine()):
+            raise ValueError("ABI probe host does not match this process")
+        comparison = compare_native_probe(probe.get("observation"), adapter["char_signedness"])
+        if not comparison["matches"]:
+            raise ValueError("ABI probe does not match this host's declared layout")
+        identity["abi_probe"] = {"sha256": hashlib.sha256(data).hexdigest(),
+                                 "comparison": comparison, "record": probe}
+        identity["layout_evidence"] = "supplied matching host-header probe; producer library ABI unverified"
     request = {"library": str(library), "library_sha256": library_hash, "adapter": adapter,
                "timeout": args.timeout, "action": "metadata"}
     started = time.monotonic()
     metadata = run_worker(request, min(args.timeout, args.total_timeout))
-    report = {"schema": "inverter-interface-report/1", "identity": identity,
+    report = {"schema": "inverter-interface-report/2", "identity": identity,
               "scope": "metadata and parameter validation; no initialization or electrical stepping",
               "limits": {"worker_seconds": args.timeout, "total_seconds": args.total_timeout,
                          "max_cases": args.max_cases, "worker_log_bytes": 131072},
               "metadata": metadata, "cases": [], "skipped": [], "unexecuted_case_ids": []}
     if metadata["ok"]:
-        cases, report["skipped"] = plan_cases(metadata["metadata"])
+        cases, report["skipped"] = plan_cases(metadata["metadata"], adapter)
         if len(cases) > args.max_cases:
             report["unexecuted_case_ids"] = [case["id"] for case in cases]
             report["incomplete_reason"] = "case_limit"

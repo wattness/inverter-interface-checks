@@ -16,6 +16,20 @@ ADAPTER_KEYS = {
     "expected_model_name", "expected_parameters",
     "parameter_check_setup",
     "char_signedness",
+    "recheck_policy", "parameter_mutation", "nonfinite", "name_syntax", "fixed_value_policy",
+}
+
+POLICY_DEFAULTS = {
+    "recheck_policy": "same-instance", "parameter_mutation": "forbid",
+    "nonfinite": "reject", "name_syntax": "nonempty", "fixed_value_policy": "nonzero",
+}
+POLICY_VALUES = {
+    "recheck_policy": ("same-instance", "none"),
+    "parameter_mutation": ("forbid", "allow-normalization"),
+    "nonfinite": ("reject", "skip"),
+    "name_syntax": ("nonempty", "c-identifier-ascii"),
+    "fixed_value_policy": ("nonzero", "zero-or-one"),
+    "bounds": ("inclusive", "skip"),
 }
 
 
@@ -32,21 +46,34 @@ def load_adapter(value):
     expected = {
         "schema": "inverter-interface-adapter/1", "abi": "ieee-cigre-1.1-native-c",
         "calling_convention": "cdecl", "parameter_layout": "native-struct-metadata-order",
-        "bounds": "inclusive", "invalid_return": 2,
+        "invalid_return": 2,
         "null_instance_return": 2, "null_parameters_return": 2,
         "parameter_check_setup": "none",
     }
     if any(adapter.get(key) != value for key, value in expected.items()):
         raise ValueError("unsupported adapter ABI or parameter contract")
+    for key in ("invalid_return", "null_instance_return", "null_parameters_return"):
+        if type(adapter.get(key)) is not int:
+            raise ValueError(f"{key} must be an integer")
     if not isinstance(adapter.get("id"), str) or not adapter["id"]:
         raise ValueError("adapter id must be nonempty")
-    if adapter.get("valid_returns") not in ([0], [0, 1]):
+    returns = adapter.get("valid_returns")
+    if (not isinstance(returns, list) or any(type(value) is not int for value in returns)
+            or returns not in ([0], [0, 1])):
         raise ValueError("valid_returns must be [0] or [0, 1]")
     for key in ("invalid_message", "clear_error_on_success", "null_parameters_message"):
         if not isinstance(adapter.get(key), bool):
             raise ValueError(f"{key} must be boolean")
     if adapter.get("char_signedness") not in ("signed", "unsigned", "unsupported"):
         raise ValueError("char_signedness must be signed, unsigned or unsupported")
+    for key, default in POLICY_DEFAULTS.items():
+        adapter.setdefault(key, default)
+    for key, values in POLICY_VALUES.items():
+        if adapter.get(key) not in values:
+            raise ValueError(f"unsupported {key} policy")
+    name = adapter.get("expected_model_name")
+    if name is not None and (not isinstance(name, str) or not name):
+        raise ValueError("expected_model_name must be a nonempty string or null")
     parameters = adapter.get("expected_parameters")
     if parameters is not None and (
         not isinstance(parameters, list) or any(
@@ -78,7 +105,8 @@ def adjacent_float32(value, positive):
     return struct.unpack("!f", struct.pack("!I", bits))[0]
 
 
-def plan_cases(metadata):
+def plan_cases(metadata, adapter=None):
+    adapter = adapter or {**POLICY_DEFAULTS, "bounds": "inclusive"}
     cases = [{"id": "defaults", "kind": "valid"}]
     skipped = []
     for index, row in enumerate(metadata["parameters"]):
@@ -87,13 +115,20 @@ def plan_cases(metadata):
             skipped.append({"parameter": name, "reason": "fixed" if row["fixed"] else "string"})
             continue
         low, high = row["minimum"], row["maximum"]
-        values = [("minimum", low, "valid"), ("maximum", high, "valid")]
+        range_checks = adapter["bounds"] == "inclusive"
+        values = [("minimum", low, "valid"), ("maximum", high, "valid")] if range_checks else []
+        if not range_checks:
+            skipped.append({"parameter": name, "reason": "bounds probes excluded by adapter policy"})
         if datatype in (8, 9):
             before = adjacent_float32(low, False) if datatype == 8 else math.nextafter(low, -math.inf)
             after = adjacent_float32(high, True) if datatype == 8 else math.nextafter(high, math.inf)
-            values += [("below_minimum", before, "invalid"), ("above_maximum", after, "invalid"),
-                       ("nan", "nan", "invalid"), ("positive_infinity", "inf", "invalid"),
-                       ("negative_infinity", "-inf", "invalid")]
+            if range_checks:
+                values += [("below_minimum", before, "invalid"), ("above_maximum", after, "invalid")]
+            if adapter["nonfinite"] == "reject":
+                values += [("nan", "nan", "invalid"), ("positive_infinity", "inf", "invalid"),
+                           ("negative_infinity", "-inf", "invalid")]
+            else:
+                skipped.append({"parameter": name, "reason": "nonfinite probes excluded by adapter policy"})
         else:
             limits = {1: (0, 255), 2: (-128, 127), 3: (0, 255),
                       4: (-32768, 32767), 5: (0, 65535),
@@ -101,6 +136,8 @@ def plan_cases(metadata):
             if datatype == 1 and row["char_signedness"] == "signed":
                 limits[1] = (-128, 127)
             for label, value in (("below_minimum", low - 1), ("above_maximum", high + 1)):
+                if not range_checks:
+                    continue
                 if limits[datatype][0] <= value <= limits[datatype][1]:
                     values.append((label, value, "invalid"))
                 else:
