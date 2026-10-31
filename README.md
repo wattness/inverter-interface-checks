@@ -8,7 +8,7 @@ header-layout probe.
 The adapters implement the native 64-bit cdecl layout exposed by OpenIBR's
 public IEEE/CIGRE 1.1 header. Passing a selected adapter does not establish CIGRE
 TB958 conformance, electrical suitability or simulator compatibility. This
-version is `0.2.0`; the original `v0.1.0` release and its reports remain separate.
+version is `0.2.1`; the original `v0.1.0` release and its reports remain separate.
 
 ## Run
 
@@ -96,6 +96,10 @@ convention, native field order, allowed returns and message policies are declare
 in [`inverter_interface_checks/adapters/ieee-cigre-1.1.json`](inverter_interface_checks/adapters/ieee-cigre-1.1.json).
 Unknown fields and unsupported layouts are rejected. Integer return declarations
 must be JSON integers; booleans and floating-point lookalikes are invalid.
+Adapter and supplied receipt JSON reject duplicate object keys and nonfinite
+numbers before loading the library. Worker-result JSON follows the same rule.
+The attached build-receipt digest covers the exact bytes decoded, including
+when the file changes afterward.
 
 These are checker/model policies, not universal standards obligations:
 

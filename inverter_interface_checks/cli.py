@@ -12,6 +12,7 @@ from pathlib import Path
 from . import __version__
 from .abi import PROBE_SOURCES, compare_native_probe
 from .contracts import load_adapter, plan_cases
+from .jsonio import loads
 from .process import run_worker, sha256
 
 
@@ -87,14 +88,14 @@ def inspect(args):
         data = args.build_receipt.read_bytes()
         if len(data) > 131072:
             raise ValueError("build receipt exceeds 128 KiB")
-        receipt = json.loads(data)
+        receipt = loads(data)
         if (not isinstance(receipt, dict) or receipt.get("schema") not in (
                 "inverter-fixture-build/1", "inverter-openibr-build/1")
                 or not isinstance(receipt.get("library"), dict)
                 or receipt["library"].get("sha256") != library_hash):
             raise ValueError("build receipt does not match the library")
         identity["build_receipt"] = receipt
-        identity["build_receipt_sha256"] = sha256(args.build_receipt)
+        identity["build_receipt_sha256"] = hashlib.sha256(data).hexdigest()
         identity["build_receipt_scope"] = "supplied record with matching library hash; not independent attestation"
     probe_path = getattr(args, "abi_probe", None)
     identity["layout_evidence"] = "ctypes declarations only; producer library ABI unverified"
@@ -102,7 +103,7 @@ def inspect(args):
         data = probe_path.read_bytes()
         if len(data) > 131072:
             raise ValueError("ABI probe receipt exceeds 128 KiB")
-        probe = json.loads(data)
+        probe = loads(data)
         if (not isinstance(probe, dict) or probe.get("schema") != "inverter-native-abi-probe-build/1"
                 or probe.get("scope") != "host-header-software-probe"
                 or probe.get("producer_library_attestation") is not False):

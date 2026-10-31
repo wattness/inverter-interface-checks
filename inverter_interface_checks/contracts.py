@@ -1,9 +1,10 @@
 """Explicit adapter policies; these checks do not certify a model."""
 
-import json
 import math
 import struct
 from pathlib import Path
+
+from .jsonio import loads
 
 EXPORTS = (
     "Model_GetInfo", "Model_FirstCall", "Model_PrintInfo", "Model_CheckParameters",
@@ -40,7 +41,7 @@ def load_adapter(value):
     data = path.read_bytes()
     if len(data) > 65536:
         raise ValueError("adapter exceeds 64 KiB")
-    adapter = json.loads(data)
+    adapter = loads(data)
     if not isinstance(adapter, dict) or set(adapter) - ADAPTER_KEYS:
         raise ValueError("adapter has unknown fields")
     expected = {

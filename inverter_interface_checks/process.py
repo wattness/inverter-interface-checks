@@ -10,6 +10,8 @@ import tempfile
 import time
 from pathlib import Path
 
+from .jsonio import loads
+
 LOG_LIMIT = 131072
 
 
@@ -80,7 +82,7 @@ def run_worker(request, timeout):
             return {"ok": False, "execution": reason, "returncode": process.returncode,
                     "elapsed_seconds": elapsed, "native_log": log_text}
         try:
-            result = json.loads(result_path.read_text(encoding="utf-8"))
+            result = loads(result_path.read_text(encoding="utf-8"))
             if not isinstance(result, dict) or type(result.get("ok")) is not bool:
                 raise ValueError("invalid worker result")
         except (OSError, ValueError) as error:
