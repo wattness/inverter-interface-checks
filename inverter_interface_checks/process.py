@@ -11,6 +11,7 @@ import time
 from pathlib import Path
 
 from .jsonio import loads
+from .packets import validate_result
 
 LOG_LIMIT = 131072
 
@@ -85,6 +86,7 @@ def run_worker(request, timeout):
             result = loads(result_path.read_text(encoding="utf-8"))
             if not isinstance(result, dict) or type(result.get("ok")) is not bool:
                 raise ValueError("invalid worker result")
+            validate_result(request, result)
         except (OSError, ValueError) as error:
             return {"ok": False, "execution": "invalid_worker_result", "detail": str(error),
                     "elapsed_seconds": elapsed, "native_log": log_text}

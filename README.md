@@ -8,7 +8,7 @@ header-layout probe.
 The adapters implement the native 64-bit cdecl layout exposed by OpenIBR's
 public IEEE/CIGRE 1.1 header. Passing a selected adapter does not establish CIGRE
 TB958 conformance, electrical suitability or simulator compatibility. This
-version is `0.2.1`; the original `v0.1.0` release and its reports remain separate.
+version is `0.2.2`; the original `v0.1.0` release and its reports remain separate.
 
 ## Run
 
@@ -100,6 +100,15 @@ Adapter and supplied receipt JSON reject duplicate object keys and nonfinite
 numbers before loading the library. Worker-result JSON follows the same rule.
 The attached build-receipt digest covers the exact bytes decoded, including
 when the file changes afterward.
+
+A worker's `ok: true` is accepted only with complete evidence for the requested
+operation. Metadata needs the bounded model fields and matching declared host
+layouts. Cases need their requested call/recheck sequence, returns, active-channel
+diagnostics, metadata recheck and all required Instance, buffer and string checks.
+Numeric normalization retains its selected value checks. Incomplete or
+contradictory success packets become `invalid_worker_result`; existing failed
+native observations remain in the report. This validates packet completeness,
+not the authenticity of the worker's assertions.
 
 These are checker/model policies, not universal standards obligations:
 
