@@ -8,7 +8,7 @@ header-layout probe.
 The adapters implement the native 64-bit cdecl layout exposed by OpenIBR's
 public IEEE/CIGRE 1.1 header. Passing a selected adapter does not establish CIGRE
 TB958 conformance, electrical suitability or simulator compatibility. This
-version is `0.2.2`; the original `v0.1.0` release and its reports remain separate.
+version is `0.2.3`; the original `v0.1.0` release and its reports remain separate.
 
 ## Run
 
@@ -109,6 +109,10 @@ Numeric normalization retains its selected value checks. Incomplete or
 contradictory success packets become `invalid_worker_result`; existing failed
 native observations remain in the report. This validates packet completeness,
 not the authenticity of the worker's assertions.
+
+Process cleanup confirms worker exit within its existing five-second limit
+when macOS denies a process-group signal. If the worker stays alive, the signal
+error is preserved.
 
 These are checker/model policies, not universal standards obligations:
 

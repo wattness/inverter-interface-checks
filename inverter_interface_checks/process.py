@@ -39,6 +39,12 @@ def stop_process(process):
             os.killpg(process.pid, signal.SIGKILL)
         except ProcessLookupError:
             pass
+        except PermissionError as error:
+            try:
+                process.wait(timeout=5)
+            except subprocess.TimeoutExpired as pending:
+                raise error from pending
+            return
     else:
         process.kill()
     process.wait(timeout=5)
