@@ -58,11 +58,13 @@ async function errorReport(page, bytes, pattern, name = "report.json") {
 async function pasteReport(page, bytes) {
   const input = page.locator("#report-text");
   const text = bytes.toString("utf8");
-  try { await input.fill(text, { timeout: 5000 }); }
-  catch (error) {
-    // Touch Chromium can time out after inserting the complete textarea value.
-    if (error.name !== "TimeoutError" || await input.inputValue() !== text) throw error;
-  }
+  await input.fill("{}");
+  assert.equal(await input.inputValue(), "{}");
+  // Populate the full fixture without mobile IME automation, then use the real reader.
+  await input.evaluate((field, value) => {
+    field.value = value;
+    field.dispatchEvent(new InputEvent("input", { bubbles: true, inputType: "insertFromPaste", data: value }));
+  }, text);
   assert.equal(await input.inputValue(), text);
   await page.locator("#inspect-text").click();
   await visible(page, "#report-content");
