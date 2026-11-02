@@ -1,0 +1,5003 @@
+{
+  "schema": "inverter-interface-report/2",
+  "identity": {
+    "library": {
+      "name": "GFM_Battery_OpenIBR.dll",
+      "sha256": "ae49bbfd0c7dea85c7149d5d9848cc7f2f1f44789715b59f7a4ad9d4f1d2fa24"
+    },
+    "adapter": {
+      "id": "openibr-1.1",
+      "name": "openibr-1.1.json",
+      "sha256": "95b3810ff379d7e75b29ef1967ead2b5e72c25b7279b0c6401d2993dd6ec0fdb",
+      "resolved_policy": {
+        "schema": "inverter-interface-adapter/1",
+        "id": "openibr-1.1",
+        "abi": "ieee-cigre-1.1-native-c",
+        "calling_convention": "cdecl",
+        "parameter_layout": "native-struct-metadata-order",
+        "parameter_check_setup": "none",
+        "char_signedness": "unsupported",
+        "bounds": "inclusive",
+        "recheck_policy": "same-instance",
+        "parameter_mutation": "forbid",
+        "nonfinite": "reject",
+        "name_syntax": "nonempty",
+        "fixed_value_policy": "nonzero",
+        "valid_returns": [
+          0,
+          1
+        ],
+        "invalid_return": 2,
+        "invalid_message": true,
+        "clear_error_on_success": false,
+        "null_instance_return": 2,
+        "null_parameters_return": 2,
+        "null_parameters_message": false,
+        "expected_model_name": "GFM_Battery_OpenIBR",
+        "expected_parameters": [
+          {
+            "name": "H",
+            "datatype": 9
+          },
+          {
+            "name": "D",
+            "datatype": 9
+          },
+          {
+            "name": "kDroop",
+            "datatype": 9
+          }
+        ]
+      }
+    },
+    "sources": [],
+    "source_scope": "explicitly supplied files; source-to-library correspondence is unverified",
+    "host": {
+      "os": "Windows",
+      "architecture": "AMD64",
+      "python": "3.12.10"
+    },
+    "engine": {
+      "version": "0.2.3",
+      "files": {
+        "__init__.py": "dc8689e9bce40ba67fa6cf6aca23798ae728238575baa52e6fb56ee158e36897",
+        "__main__.py": "935a1c1166b0c1ea35a82256345000bf2c73ded718d77773bc27a71ecce28f7d",
+        "abi.py": "5f69524de60a6abea50916179c390e2243b7b50d0608c9e7782ffbdea0f5b369",
+        "cli.py": "ac7219fe2909d9fd18131080c92211cea0cbc94db44685aa27b0e5e84bf46429",
+        "contracts.py": "e7388a24045fa6676cd2c8a2121e70bc9a55afc82829eac890b8c232ed19c25d",
+        "jsonio.py": "68ada28e770486d61b277b44139dca3638350828c9cba60f3c770a5d4183d670",
+        "packets.py": "918b9347e95db711c93a7df8d1cedd69fe84b1f97671ca96acd75d334d3db3b2",
+        "process.py": "0a922d170d045f4507b6366447ed401de4075bc33647ba22e0252dd8c4f09f4a",
+        "worker.py": "234d6c148d89111745d4ba5b1d5a14fba25d7fe428aebde177d5cae91ed9af9a"
+      }
+    },
+    "build_receipt": {
+      "schema": "inverter-openibr-build/1",
+      "source_commit": "0489b0f2c5cea392f6b6b0743dae43a630732e58",
+      "scope": "production library build; no initialization or electrical stepping",
+      "compiler": {
+        "name": "clang.exe",
+        "sha256": "57e32b1ea2456f12f97bf802453171bbff12d56b2c486b4eca0c75343c0cda2c",
+        "version": "clang version 20.1.8\nTarget: x86_64-pc-windows-msvc\nThread model: posix\nInstalledDir: C:\\Program Files\\LLVM\\bin\n",
+        "scope": "compiler invoked by this recorded build"
+      },
+      "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+      "sources": {
+        "LICENSE": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594",
+        "NOTICE": "9f7cd0de3317fbd21d1b4098a5ee9c7852674be4c7b4f39e0b696238689acb42",
+        "c_language_library/companion_algorithms/ac_checks_A/ac_checks_A.c": "ee5ea0b383de265ab67289bca4a9b125545ecc2f050d31f604ef5733c5624525",
+        "c_language_library/companion_algorithms/ac_checks_A_schema.yaml": "0bbe0a2f03d9570a139129c49132fdff418c2a519b656a3e19c757aa27893871",
+        "c_language_library/companion_algorithms/ac_monitor_A/ac_monitor_A.c": "044bd2c1ab36c089b4299302ea49eac61515c652563cb103d30ee3c67c271192",
+        "c_language_library/companion_algorithms/ac_monitor_A_schema.yaml": "ace0cfbb078ada38ba5483f73440b03f3db5a8474d6a32db2d2d9ab1a6d5a1e5",
+        "c_language_library/companion_algorithms/current_source_A/current_source_A.c": "77d22a6338af1c28daf8ab32e89771a485208d194f3230e86d0c49df752bbf0b",
+        "c_language_library/companion_algorithms/current_source_A_schema.yaml": "9671c1cd16eb9184d31349e420d071dcb8e58e75f74c0b253e02ece314d19732",
+        "c_language_library/companion_algorithms/dc_voltage_cntl_A_schema.yaml": "7d2ba5517c5e66996b89d65b622ecdb612f29ab48f53d9c0aa1212369da98d0e",
+        "c_language_library/companion_algorithms/dc_voltage_control_A/dc_voltage_control_A.c": "a6ec55fb565cab99a73e1ba5f3940ccc26aedbf5d674f356b28a80c67f854e66",
+        "c_language_library/companion_algorithms/power_limiter_A/power_limiter_A.c": "618b0fc82e7f38bd692315fff32de9225f1365c27923f8d20036d5937b5482f1",
+        "c_language_library/companion_algorithms/power_limiter_A_schema.yaml": "2febac00166b99a4e12dab77ca3d10520293a587b4d8c66a8e9c03e0bb382531",
+        "c_language_library/design_specific_examples/circuit_controls_A/circuit_controls_A.c": "2de58a4ec8b9a1bb99d3892b9fc42a38781279957795c608e6cd678c93775273",
+        "c_language_library/design_specific_examples/circuit_controls_A_schema.yaml": "b6169b5208cd6cb9ce0680fd6e620ce431e4cd4755ec3f5c1f293b57bfe0bc9d",
+        "c_language_library/design_specific_examples/circuit_controls_B/circuit_controls_B.c": "e1a971092ba5b5af339d46637987b964ab7e74d0ca48b146ed42805a27615921",
+        "c_language_library/design_specific_examples/circuit_controls_B_schema.yaml": "e75e0e5e5d012c2f2f7bf3a53d8e10d055e806771cea8c2f71251a80f6cd377e",
+        "c_language_library/design_specific_examples/modes_and_protection_A/modes_and_protection_A.c": "24e5143422023af89edbbcae7d2bd97be194b7f32144854c585ecc7004199dc6",
+        "c_language_library/design_specific_examples/modes_and_protection_A_schema.yaml": "32adb1eb4e7603d826a548175ad49528de7c16e7ff1f14276399bc8166fddb79",
+        "c_language_library/gfm_essentials/current_limiting_A/current_limiting_A.c": "d7fd538237390d3ffa8ea0b1425ad9db71815f44ebef0308f669fb238a588a0d",
+        "c_language_library/gfm_essentials/current_limiting_A_schema.yaml": "d0556f368641c2d567fa3dc6e25b119f130f7200da0ba582b719afb61882d7d9",
+        "c_language_library/gfm_essentials/current_limiting_B/current_limiting_B.c": "e276399b5f38d4557f595a64c78a33ad81428b90482a15150be475bfc24945af",
+        "c_language_library/gfm_essentials/current_limiting_B_schema.yaml": "14cae2f1fbfe155a2e073478364c9cfd67a7b74b79e1c27690895d6ebd5befac",
+        "c_language_library/gfm_essentials/machine_model_A/machine_model_A.c": "af0575544be1c1fcb459bb95fb311d5141b4c1e5434a08bdf894b0f04bfa5c8e",
+        "c_language_library/gfm_essentials/machine_model_A_schema.yaml": "6a1821f67843fcc0611791ba7c21bf44d18d13381ac60e1ed234db16c32cf854",
+        "c_language_library/helper_lib/cmplx.c": "cc9bccb82321ac3c3f3009384d61e9e8a73fbeadd9193689d3e479376e9345b0",
+        "c_language_library/helper_lib/cmplx.h": "fde5e6eac682eb0a219140a7855290d4de247b501de83800658e63ae9c623d4b",
+        "c_language_library/helper_lib/common_types.h": "8228229a1cbc5056caa4207231396c9d464b692b0028757f1872ec40c5fa1fb0",
+        "c_language_library/helper_lib/control_lib.h": "b6d2572acf407b92ff9b1288f09feb0142b9ad934af10a24ad25737dca1dccd7",
+        "c_language_library/helper_lib/helper_macros.h": "7f09f6991b46490a312bcc44b5b143ffa9d16b0adde440095464f3aa5f07b1f0",
+        "c_language_library/helper_lib/timers.c": "0a9145f9bc92db4271a78dc153d9c61a789f6ff191e34e1b89ef974e8312c2d6",
+        "c_language_library/helper_lib/timers.h": "eb77478c49809d2728fc1b3766caeccf5159c58973d6e0911be24063ca6decdf",
+        "ieee_cigre_dll/IEEE_Cigre_DLLInterface.h": "3b85aa4372f30c0a291cbe786c2a01a4caeaa22e78cda54ce8e7a112a3822631",
+        "ieee_cigre_dll/IEEE_Cigre_DLLInterface_types.h": "fed686063e1a021beb8aaae54cfdcaddccb34dc20743753d529e085f0f9b0a3e",
+        "ieee_cigre_dll/debug_signals_config.yaml": "91a3f55fd4c98c6149af1a66885e90287eec4c21eebd9c447c5716a4e7feccf1",
+        "ieee_cigre_dll/dll_config.yaml": "da405a52bf9d9d14271e6b9ddcc38a4863bf4fccc6f33fab22113c6179d474c1",
+        "ieee_cigre_dll/generate_dll_config.py": "252ce4aff11a960678df6f31f488faa7ff312e002eb16c228df5b6fc7b686ab9",
+        "ieee_cigre_dll/gfm_battery_app.c": "95ab8fc4ac07e30b087323805e4b2b423cb644199f5a340c1c503f71c947540f",
+        "ieee_cigre_dll/gfm_battery_app.h": "56d5d52693fb087a7f6416dfb2dbd31051289a7dc983bdaac77224ba1f88b6fb",
+        "ieee_cigre_dll/gfm_battery_dll.c": "64a09ce5fa283bffd0b3059006b3913e33d09a1fa093cfffa65b30be2aedb475",
+        "ieee_cigre_dll/logging/generate_extra_outputs.py": "f073833f4262c5937b910f6fa18a3a593b7d3329c09d715237809bcc66f76e36",
+        "ieee_cigre_dll/logging/generate_signal_catalog.py": "44f0213702e0c8f0711c0c88597b29075868ddfafe8000029855688aa91c506f",
+        "ieee_cigre_dll/logging/signal_catalog.h": "27cf367965e660056939ba90c81119842b981fe32500692af5757c3ed72e867e",
+        "ieee_cigre_dll/test_harness/ac_network.c": "b5a99281f7f89b7035d08a5cbe894b8d02c286c813903718626e64abee6d72fa",
+        "ieee_cigre_dll/test_harness/ac_network.h": "43b198c5ac9ccdeb7ccd38ed3db731d24dda230b0990195d30e7f5c624213dd8",
+        "ieee_cigre_dll/test_harness/comtrade_writer.c": "d64e78b6c6a1f2b5ff59efb8da9e5fdd5867b6d4f71b63c64863589e0eb248fa",
+        "ieee_cigre_dll/test_harness/comtrade_writer.h": "e4edfcd64b90b51c0fc14806b1d002460122d4971622f2cb7b97d9e3d0d494ba",
+        "ieee_cigre_dll/test_harness/converter_sim.c": "66d2a7d13d97a5d17f24a0d15c2099412b23d5d97359ca1bb581b1858b1f75d4",
+        "ieee_cigre_dll/test_harness/converter_sim.h": "85efca6673dd06d674afc8fdd7127734dc494344c3647ea4c76ab5640a99b036",
+        "ieee_cigre_dll/test_harness/dll_snapshot.c": "0181a7fe5f97b893c45e171ce8a8e19a1d210fd37e8be669c2418c3ebae44d99",
+        "ieee_cigre_dll/test_harness/dll_snapshot.h": "a81922da96fbbecc6e277918242abe0518ffce68fdf127f8b2a2704376ff7b8e",
+        "ieee_cigre_dll/test_harness/inverter_requests.c": "7e70c5a660a956a7d65bbab9a832ed9e39548ff0d5a15e3a3192caf78872a3ae",
+        "ieee_cigre_dll/test_harness/inverter_requests.h": "35ec26c023bfd15f77862946c3ca5947978a6e0e2a5482a2f1d88622bcaf5c19",
+        "ieee_cigre_dll/test_harness/test_harness.c": "1c77cb40a95db9300000d781b7c02d8a4c974a347cc514f1c62f8b3d22a5c5e0",
+        "ieee_cigre_dll/test_harness/test_snapshot.c": "16394312efc8daf0a6e562f3f408ef02903cbec0facffad6b628e62e26f4c962",
+        "schema_tools/generate_all_headers.py": "80b9224ee85f2abc1a5b4eb876e3c68e6e3afddca055cc135a20ec26a0fe15c8",
+        "schema_tools/generate_header.py": "c6e3ce9c80ba2136c2793df7ee474ed0cb980e7c26e06423d5d722f55dd13340",
+        "schema_tools/python_requirements.txt": "fa52a4a8871240963431340e0132d235de015e2efcace311603515cb1f15686a",
+        "schema_tools/schema_signal_utils.py": "10138ae1416d915f39daf9eed2e8b4ae0838aded287e74aabf6f74d8e550218b"
+      },
+      "generator_dependency": {
+        "PyYAML": "6.0.2"
+      },
+      "generated": {
+        "c_language_library/companion_algorithms/ac_checks_A/acChecks_A_autogen.h": "f90ee3ca6a70c59455da6f697c875933a615235f3e3738526c2053d3bac407cd",
+        "c_language_library/companion_algorithms/ac_checks_A/acChecks_A_private_autogen.h": "9121b26440315e84132fa252d3d012255415ed44527f4484ebb7a66ed7b0197a",
+        "c_language_library/companion_algorithms/ac_monitor_A/acMonitor_A_autogen.h": "2b7d0e21beffc2b47e1d5206f7f78f9861cf2b02846bb36413a3711445cafe37",
+        "c_language_library/companion_algorithms/ac_monitor_A/acMonitor_A_private_autogen.h": "de6b7246776960bb15029caf824155cfc305d8227d0e3c6abcc86869af7f6d9f",
+        "c_language_library/companion_algorithms/current_source_A/currentSource_A_autogen.h": "7dffe228dbde2677b7e2664c517ee8c6c61273d4fef2c8f9b9211f29e903a512",
+        "c_language_library/companion_algorithms/current_source_A/currentSource_A_private_autogen.h": "a354ec5762d9fc96fbf043aba3a95f11b497bde16f6f5b2460fdbf066dfb2637",
+        "c_language_library/companion_algorithms/power_limiter_A/powerLimiter_A_autogen.h": "bf9036b3acde5aab9454e0c83647da59b9ab788e868c6a9ce93dd410e239c33b",
+        "c_language_library/companion_algorithms/power_limiter_A/powerLimiter_A_private_autogen.h": "3b1041ab1265cc7dff0868f9b47bca8d7d414d14515964906642f99370d6274c",
+        "c_language_library/design_specific_examples/circuit_controls_B/circuitControls_B_autogen.h": "df9afecd651786f4fc7fffc4d4c8f01633e95289845cde7bbe7f22458ceeb680",
+        "c_language_library/design_specific_examples/circuit_controls_B/circuitControls_B_private_autogen.h": "f10701404137044b565ac81fadab57a7d9ed2afb32164866befe0eacfba8a327",
+        "c_language_library/gfm_essentials/current_limiting_A/currentLimiting_A_autogen.h": "7217e6646e5a99fdc74e42e899e523a6e89962c57c547e684c1797253f7c4866",
+        "c_language_library/gfm_essentials/current_limiting_A/currentLimiting_A_private_autogen.h": "18c94de9a88426d54784cb81683c2330af56f617b6fd00840dfa9156c7ace775",
+        "c_language_library/gfm_essentials/machine_model_A/machineModel_A_autogen.h": "9fd7eb2f1bffbd630a67fce4973d43f63b1d410e50b777b017a2534ea12255b2",
+        "c_language_library/gfm_essentials/machine_model_A/machineModel_A_private_autogen.h": "a033e5cfbade66b1765c8e0e21a147adc3c8c5a0557cea2c8f03397121047a0b",
+        "ieee_cigre_dll/dll_config_generated.h": "21f55c09ea4368163de20807d001d66805e39d4124e29e5024530173e4e640e4",
+        "ieee_cigre_dll/logging/available_signals_autogen.txt": "64bd3ee6ecb2346011619f1cb70b6ae58fb84ca809b5c1dbd837fb9429879169",
+        "ieee_cigre_dll/logging/extra_outputs_autogen.h": "baab23bb56ee17c2edeb8038630dc624a9d6f1e40828efdb0c4be89eb1755b7f",
+        "ieee_cigre_dll/logging/signal_catalog_autogen.h": "aa9f1866a9b11ea967a8d6ac59135fb63fafd1c72db0246eb22797834280f016"
+      },
+      "commands": [
+        [
+          "C:\\hostedtoolcache\\windows\\Python\\3.12.10\\x64\\python.exe",
+          "-I",
+          "-B",
+          "<source>\\schema_tools\\generate_header.py",
+          "<source>\\c_language_library\\companion_algorithms\\ac_checks_A_schema.yaml",
+          "<source>\\c_language_library\\companion_algorithms\\ac_checks_A"
+        ],
+        [
+          "C:\\hostedtoolcache\\windows\\Python\\3.12.10\\x64\\python.exe",
+          "-I",
+          "-B",
+          "<source>\\schema_tools\\generate_header.py",
+          "<source>\\c_language_library\\companion_algorithms\\ac_monitor_A_schema.yaml",
+          "<source>\\c_language_library\\companion_algorithms\\ac_monitor_A"
+        ],
+        [
+          "C:\\hostedtoolcache\\windows\\Python\\3.12.10\\x64\\python.exe",
+          "-I",
+          "-B",
+          "<source>\\schema_tools\\generate_header.py",
+          "<source>\\c_language_library\\companion_algorithms\\current_source_A_schema.yaml",
+          "<source>\\c_language_library\\companion_algorithms\\current_source_A"
+        ],
+        [
+          "C:\\hostedtoolcache\\windows\\Python\\3.12.10\\x64\\python.exe",
+          "-I",
+          "-B",
+          "<source>\\schema_tools\\generate_header.py",
+          "<source>\\c_language_library\\companion_algorithms\\power_limiter_A_schema.yaml",
+          "<source>\\c_language_library\\companion_algorithms\\power_limiter_A"
+        ],
+        [
+          "C:\\hostedtoolcache\\windows\\Python\\3.12.10\\x64\\python.exe",
+          "-I",
+          "-B",
+          "<source>\\schema_tools\\generate_header.py",
+          "<source>\\c_language_library\\gfm_essentials\\current_limiting_A_schema.yaml",
+          "<source>\\c_language_library\\gfm_essentials\\current_limiting_A"
+        ],
+        [
+          "C:\\hostedtoolcache\\windows\\Python\\3.12.10\\x64\\python.exe",
+          "-I",
+          "-B",
+          "<source>\\schema_tools\\generate_header.py",
+          "<source>\\c_language_library\\gfm_essentials\\machine_model_A_schema.yaml",
+          "<source>\\c_language_library\\gfm_essentials\\machine_model_A"
+        ],
+        [
+          "C:\\hostedtoolcache\\windows\\Python\\3.12.10\\x64\\python.exe",
+          "-I",
+          "-B",
+          "<source>\\schema_tools\\generate_header.py",
+          "<source>\\c_language_library\\design_specific_examples\\circuit_controls_B_schema.yaml",
+          "<source>\\c_language_library\\design_specific_examples\\circuit_controls_B"
+        ],
+        [
+          "C:\\hostedtoolcache\\windows\\Python\\3.12.10\\x64\\python.exe",
+          "-I",
+          "-B",
+          "<source>\\ieee_cigre_dll\\logging\\generate_signal_catalog.py"
+        ],
+        [
+          "C:\\hostedtoolcache\\windows\\Python\\3.12.10\\x64\\python.exe",
+          "-I",
+          "-B",
+          "<source>\\ieee_cigre_dll\\logging\\generate_extra_outputs.py"
+        ],
+        [
+          "C:\\hostedtoolcache\\windows\\Python\\3.12.10\\x64\\python.exe",
+          "-I",
+          "-B",
+          "<source>\\ieee_cigre_dll\\generate_dll_config.py"
+        ],
+        [
+          "C:\\Program Files\\LLVM\\bin\\clang.exe",
+          "-std=c99",
+          "-Wall",
+          "-Wextra",
+          "-O2",
+          "-DNDEBUG",
+          "-shared",
+          "-o",
+          "<build>\\GFM_Battery_OpenIBR.dll",
+          "ieee_cigre_dll/gfm_battery_dll.c",
+          "ieee_cigre_dll/gfm_battery_app.c",
+          "c_language_library/gfm_essentials/machine_model_A/machine_model_A.c",
+          "c_language_library/gfm_essentials/current_limiting_A/current_limiting_A.c",
+          "c_language_library/companion_algorithms/ac_monitor_A/ac_monitor_A.c",
+          "c_language_library/companion_algorithms/ac_checks_A/ac_checks_A.c",
+          "c_language_library/companion_algorithms/current_source_A/current_source_A.c",
+          "c_language_library/companion_algorithms/power_limiter_A/power_limiter_A.c",
+          "c_language_library/design_specific_examples/circuit_controls_B/circuit_controls_B.c",
+          "c_language_library/helper_lib/cmplx.c",
+          "c_language_library/helper_lib/timers.c"
+        ]
+      ],
+      "library": {
+        "name": "GFM_Battery_OpenIBR.dll",
+        "sha256": "ae49bbfd0c7dea85c7149d5d9848cc7f2f1f44789715b59f7a4ad9d4f1d2fa24"
+      }
+    },
+    "build_receipt_sha256": "78d1e6639be9e38cd41d362d267830b1a77e845f4513507c343de9e8a2b37849",
+    "build_receipt_scope": "supplied record with matching library hash; not independent attestation",
+    "layout_evidence": "supplied matching host-header probe; producer library ABI unverified",
+    "abi_probe": {
+      "sha256": "cde4e33068c02e2fd650844ff50763da787e8e2527013f2f6da116185e18a467",
+      "comparison": {
+        "matches": true,
+        "mismatches": [],
+        "scope": "host-header-software-probe",
+        "producer_library_attestation": false,
+        "char_signedness_policy": "unsupported",
+        "enum_policy": "recorded; OpenIBR ABI fields and function returns use int"
+      },
+      "record": {
+        "schema": "inverter-native-abi-probe-build/1",
+        "scope": "host-header-software-probe",
+        "producer_library_attestation": false,
+        "compiler": {
+          "executable": "C:\\Program Files\\LLVM\\bin\\clang.exe",
+          "sha256": "57e32b1ea2456f12f97bf802453171bbff12d56b2c486b4eca0c75343c0cda2c",
+          "version": "clang version 20.1.8\nTarget: x86_64-pc-windows-msvc\nThread model: posix\nInstalledDir: C:\\Program Files\\LLVM\\bin\n",
+          "version_exit_code": 0
+        },
+        "command": [
+          "C:\\Program Files\\LLVM\\bin\\clang.exe",
+          "-std=c99",
+          "-Wall",
+          "-Wextra",
+          "-O0",
+          "-I",
+          "D:\\a\\inverter-interface-checks\\inverter-interface-checks\\third_party\\openibr",
+          "D:\\a\\inverter-interface-checks\\inverter-interface-checks\\tests\\fixtures\\abi_probe.c",
+          "-o",
+          "D:\\a\\inverter-interface-checks\\inverter-interface-checks\\ci-evidence\\abi-ordinary.exe"
+        ],
+        "flags": [
+          "-std=c99",
+          "-Wall",
+          "-Wextra",
+          "-O0",
+          "-I",
+          "D:\\a\\inverter-interface-checks\\inverter-interface-checks\\third_party\\openibr"
+        ],
+        "sources": {
+          "tests/fixtures/abi_probe.c": "8edeb536d599fdfcf86174aa7f03853d2bb1fb63b353b86f1bfcfd56578fe9a4",
+          "third_party/openibr/IEEE_Cigre_DLLInterface.h": "3b85aa4372f30c0a291cbe786c2a01a4caeaa22e78cda54ce8e7a112a3822631",
+          "third_party/openibr/IEEE_Cigre_DLLInterface_types.h": "fed686063e1a021beb8aaae54cfdcaddccb34dc20743753d529e085f0f9b0a3e"
+        },
+        "compiler_identity_timeout_seconds": 30,
+        "compile_timeout_seconds": 90,
+        "host": {
+          "os": "Windows",
+          "architecture": "AMD64",
+          "python": "3.12.10"
+        },
+        "packing": "compiler-default",
+        "executable": {
+          "name": "abi-ordinary.exe",
+          "sha256": "8c775fa7eb065a59bff1733a2a8c04dbed57303233b4b851ed37c505644fdebc"
+        },
+        "compiler_output": "",
+        "observation": {
+          "schema": "inverter-native-abi-observation/1",
+          "scope": "host-header-software-probe",
+          "producer_library_attestation": false,
+          "endianness": "little",
+          "char_bits": 8,
+          "float_representation": {
+            "radix": 2,
+            "float_mantissa_bits": 24,
+            "double_mantissa_bits": 53
+          },
+          "compiler_macros": {
+            "family": "clang",
+            "major": 20,
+            "minor": 1,
+            "patch": 8
+          },
+          "scalars": {
+            "char": {
+              "size": 1,
+              "alignment": 1,
+              "signedness": "signed"
+            },
+            "int8_t": {
+              "size": 1,
+              "alignment": 1,
+              "signedness": "signed"
+            },
+            "uint8_t": {
+              "size": 1,
+              "alignment": 1,
+              "signedness": "unsigned"
+            },
+            "int16_t": {
+              "size": 2,
+              "alignment": 2,
+              "signedness": "signed"
+            },
+            "uint16_t": {
+              "size": 2,
+              "alignment": 2,
+              "signedness": "unsigned"
+            },
+            "int32_t": {
+              "size": 4,
+              "alignment": 4,
+              "signedness": "signed"
+            },
+            "uint32_t": {
+              "size": 4,
+              "alignment": 4,
+              "signedness": "unsigned"
+            },
+            "int": {
+              "size": 4,
+              "alignment": 4,
+              "signedness": "signed"
+            },
+            "long": {
+              "size": 4,
+              "alignment": 4,
+              "signedness": "signed"
+            },
+            "float": {
+              "size": 4,
+              "alignment": 4,
+              "signedness": "not-applicable"
+            },
+            "double": {
+              "size": 8,
+              "alignment": 8,
+              "signedness": "not-applicable"
+            },
+            "pointer": {
+              "size": 8,
+              "alignment": 8,
+              "signedness": "not-applicable"
+            }
+          },
+          "enums": {
+            "DataType": {
+              "size": 4,
+              "alignment": 4,
+              "signedness": "signed"
+            },
+            "ReturnValue": {
+              "size": 4,
+              "alignment": 4,
+              "signedness": "signed"
+            }
+          },
+          "datatype_ids": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10
+          ],
+          "aggregates": {
+            "Signal": {
+              "size": 32,
+              "alignment": 8,
+              "fields": {
+                "Name": {
+                  "offset": 0,
+                  "size": 8,
+                  "alignment": 8
+                },
+                "Description": {
+                  "offset": 8,
+                  "size": 8,
+                  "alignment": 8
+                },
+                "Unit": {
+                  "offset": 16,
+                  "size": 8,
+                  "alignment": 8
+                },
+                "DataType": {
+                  "offset": 24,
+                  "size": 4,
+                  "alignment": 4
+                },
+                "Width": {
+                  "offset": 28,
+                  "size": 4,
+                  "alignment": 4
+                }
+              }
+            },
+            "DefaultValue": {
+              "size": 8,
+              "alignment": 8,
+              "fields": {
+                "Char_Val": {
+                  "offset": 0,
+                  "size": 1,
+                  "alignment": 1
+                },
+                "Char_Ptr": {
+                  "offset": 0,
+                  "size": 8,
+                  "alignment": 8
+                },
+                "Int8_Val": {
+                  "offset": 0,
+                  "size": 1,
+                  "alignment": 1
+                },
+                "Uint8_Val": {
+                  "offset": 0,
+                  "size": 1,
+                  "alignment": 1
+                },
+                "Int16_Val": {
+                  "offset": 0,
+                  "size": 2,
+                  "alignment": 2
+                },
+                "Uint16_Val": {
+                  "offset": 0,
+                  "size": 2,
+                  "alignment": 2
+                },
+                "Int32_Val": {
+                  "offset": 0,
+                  "size": 4,
+                  "alignment": 4
+                },
+                "Uint32_Val": {
+                  "offset": 0,
+                  "size": 4,
+                  "alignment": 4
+                },
+                "Real32_Val": {
+                  "offset": 0,
+                  "size": 4,
+                  "alignment": 4
+                },
+                "Real64_Val": {
+                  "offset": 0,
+                  "size": 8,
+                  "alignment": 8
+                }
+              }
+            },
+            "MinMaxValue": {
+              "size": 8,
+              "alignment": 8,
+              "fields": {
+                "Char_Val": {
+                  "offset": 0,
+                  "size": 1,
+                  "alignment": 1
+                },
+                "Int8_Val": {
+                  "offset": 0,
+                  "size": 1,
+                  "alignment": 1
+                },
+                "Uint8_Val": {
+                  "offset": 0,
+                  "size": 1,
+                  "alignment": 1
+                },
+                "Int16_Val": {
+                  "offset": 0,
+                  "size": 2,
+                  "alignment": 2
+                },
+                "Uint16_Val": {
+                  "offset": 0,
+                  "size": 2,
+                  "alignment": 2
+                },
+                "Int32_Val": {
+                  "offset": 0,
+                  "size": 4,
+                  "alignment": 4
+                },
+                "Uint32_Val": {
+                  "offset": 0,
+                  "size": 4,
+                  "alignment": 4
+                },
+                "Real32_Val": {
+                  "offset": 0,
+                  "size": 4,
+                  "alignment": 4
+                },
+                "Real64_Val": {
+                  "offset": 0,
+                  "size": 8,
+                  "alignment": 8
+                }
+              }
+            },
+            "Parameter": {
+              "size": 64,
+              "alignment": 8,
+              "fields": {
+                "Name": {
+                  "offset": 0,
+                  "size": 8,
+                  "alignment": 8
+                },
+                "GroupName": {
+                  "offset": 8,
+                  "size": 8,
+                  "alignment": 8
+                },
+                "Description": {
+                  "offset": 16,
+                  "size": 8,
+                  "alignment": 8
+                },
+                "Unit": {
+                  "offset": 24,
+                  "size": 8,
+                  "alignment": 8
+                },
+                "DataType": {
+                  "offset": 32,
+                  "size": 4,
+                  "alignment": 4
+                },
+                "FixedValue": {
+                  "offset": 36,
+                  "size": 4,
+                  "alignment": 4
+                },
+                "DefaultValue": {
+                  "offset": 40,
+                  "size": 8,
+                  "alignment": 8
+                },
+                "MinValue": {
+                  "offset": 48,
+                  "size": 8,
+                  "alignment": 8
+                },
+                "MaxValue": {
+                  "offset": 56,
+                  "size": 8,
+                  "alignment": 8
+                }
+              }
+            },
+            "ModelInfo": {
+              "size": 160,
+              "alignment": 8,
+              "fields": {
+                "DLLInterfaceVersion": {
+                  "offset": 0,
+                  "size": 4,
+                  "alignment": 1
+                },
+                "ModelName": {
+                  "offset": 8,
+                  "size": 8,
+                  "alignment": 8
+                },
+                "ModelVersion": {
+                  "offset": 16,
+                  "size": 8,
+                  "alignment": 8
+                },
+                "ModelDescription": {
+                  "offset": 24,
+                  "size": 8,
+                  "alignment": 8
+                },
+                "GeneralInformation": {
+                  "offset": 32,
+                  "size": 8,
+                  "alignment": 8
+                },
+                "ModelCreated": {
+                  "offset": 40,
+                  "size": 8,
+                  "alignment": 8
+                },
+                "ModelCreator": {
+                  "offset": 48,
+                  "size": 8,
+                  "alignment": 8
+                },
+                "ModelLastModifiedDate": {
+                  "offset": 56,
+                  "size": 8,
+                  "alignment": 8
+                },
+                "ModelLastModifiedBy": {
+                  "offset": 64,
+                  "size": 8,
+                  "alignment": 8
+                },
+                "ModelModifiedComment": {
+                  "offset": 72,
+                  "size": 8,
+                  "alignment": 8
+                },
+                "ModelModifiedHistory": {
+                  "offset": 80,
+                  "size": 8,
+                  "alignment": 8
+                },
+                "FixedStepBaseSampleTime": {
+                  "offset": 88,
+                  "size": 8,
+                  "alignment": 8
+                },
+                "EMT_RMS_Mode": {
+                  "offset": 96,
+                  "size": 1,
+                  "alignment": 1
+                },
+                "NumInputPorts": {
+                  "offset": 100,
+                  "size": 4,
+                  "alignment": 4
+                },
+                "InputPortsInfo": {
+                  "offset": 104,
+                  "size": 8,
+                  "alignment": 8
+                },
+                "NumOutputPorts": {
+                  "offset": 112,
+                  "size": 4,
+                  "alignment": 4
+                },
+                "OutputPortsInfo": {
+                  "offset": 120,
+                  "size": 8,
+                  "alignment": 8
+                },
+                "NumParameters": {
+                  "offset": 128,
+                  "size": 4,
+                  "alignment": 4
+                },
+                "ParametersInfo": {
+                  "offset": 136,
+                  "size": 8,
+                  "alignment": 8
+                },
+                "NumIntStates": {
+                  "offset": 144,
+                  "size": 4,
+                  "alignment": 4
+                },
+                "NumFloatStates": {
+                  "offset": 148,
+                  "size": 4,
+                  "alignment": 4
+                },
+                "NumDoubleStates": {
+                  "offset": 152,
+                  "size": 4,
+                  "alignment": 4
+                }
+              }
+            },
+            "Instance": {
+              "size": 80,
+              "alignment": 8,
+              "fields": {
+                "ExternalInputs": {
+                  "offset": 0,
+                  "size": 8,
+                  "alignment": 8
+                },
+                "ExternalOutputs": {
+                  "offset": 8,
+                  "size": 8,
+                  "alignment": 8
+                },
+                "Parameters": {
+                  "offset": 16,
+                  "size": 8,
+                  "alignment": 8
+                },
+                "Time": {
+                  "offset": 24,
+                  "size": 8,
+                  "alignment": 8
+                },
+                "SimTool_EMT_RMS_Mode": {
+                  "offset": 32,
+                  "size": 1,
+                  "alignment": 1
+                },
+                "LastErrorMessage": {
+                  "offset": 40,
+                  "size": 8,
+                  "alignment": 8
+                },
+                "LastGeneralMessage": {
+                  "offset": 48,
+                  "size": 8,
+                  "alignment": 8
+                },
+                "IntStates": {
+                  "offset": 56,
+                  "size": 8,
+                  "alignment": 8
+                },
+                "FloatStates": {
+                  "offset": 64,
+                  "size": 8,
+                  "alignment": 8
+                },
+                "DoubleStates": {
+                  "offset": 72,
+                  "size": 8,
+                  "alignment": 8
+                }
+              }
+            },
+            "MixedInputs": {
+              "size": 40,
+              "alignment": 8,
+              "fields": {
+                "field_0": {
+                  "offset": 0,
+                  "size": 1,
+                  "alignment": 1
+                },
+                "field_1": {
+                  "offset": 8,
+                  "size": 24,
+                  "alignment": 8
+                },
+                "field_2": {
+                  "offset": 32,
+                  "size": 4,
+                  "alignment": 2
+                },
+                "field_3": {
+                  "offset": 36,
+                  "size": 4,
+                  "alignment": 4
+                }
+              }
+            },
+            "MixedOutputs": {
+              "size": 24,
+              "alignment": 8,
+              "fields": {
+                "field_0": {
+                  "offset": 0,
+                  "size": 8,
+                  "alignment": 4
+                },
+                "field_1": {
+                  "offset": 8,
+                  "size": 1,
+                  "alignment": 1
+                },
+                "field_2": {
+                  "offset": 16,
+                  "size": 8,
+                  "alignment": 8
+                }
+              }
+            },
+            "MixedParameters": {
+              "size": 32,
+              "alignment": 8,
+              "fields": {
+                "field_0": {
+                  "offset": 0,
+                  "size": 4,
+                  "alignment": 4
+                },
+                "field_1": {
+                  "offset": 8,
+                  "size": 8,
+                  "alignment": 8
+                },
+                "field_2": {
+                  "offset": 16,
+                  "size": 4,
+                  "alignment": 4
+                },
+                "field_3": {
+                  "offset": 20,
+                  "size": 1,
+                  "alignment": 1
+                },
+                "field_4": {
+                  "offset": 24,
+                  "size": 8,
+                  "alignment": 8
+                }
+              }
+            }
+          }
+        },
+        "comparison": {
+          "matches": true,
+          "mismatches": [],
+          "scope": "host-header-software-probe",
+          "producer_library_attestation": false,
+          "char_signedness_policy": "unsupported",
+          "enum_policy": "recorded; OpenIBR ABI fields and function returns use int"
+        },
+        "probe_timeout_seconds": 5,
+        "probe_exit_code": 0,
+        "probe_stdout_sha256": "44b97487d8839c31167338db06498967041e492f5538538a5ca6e9b86b671a63",
+        "probe_stderr": ""
+      }
+    }
+  },
+  "scope": "metadata and parameter validation; no initialization or electrical stepping",
+  "limits": {
+    "worker_seconds": 2.0,
+    "total_seconds": 60.0,
+    "max_cases": 256,
+    "worker_log_bytes": 131072
+  },
+  "metadata": {
+    "ok": true,
+    "metadata": {
+      "ModelName": "GFM_Battery_OpenIBR",
+      "ModelVersion": "0.1.0-single-instance",
+      "ModelDescription": "OpenIBR grid-forming battery inverter controller",
+      "GeneralInformation": "Single-instance IEEE/CIGRE real-code DLL. Do not load more than one instance of this DLL in a simulation -- see gfm_battery_dll.c.",
+      "ModelCreated": "",
+      "ModelCreator": "OpenIBR",
+      "ModelLastModifiedDate": "",
+      "ModelLastModifiedBy": "",
+      "ModelModifiedComment": "",
+      "ModelModifiedHistory": "",
+      "interface_version": [
+        1,
+        1,
+        0,
+        0
+      ],
+      "sample_time": 0.0002,
+      "mode": 1,
+      "inputs": [
+        {
+          "name": "v_ac",
+          "datatype": 9,
+          "description": "3-phase AC terminal voltage",
+          "unit": "V",
+          "width": 3
+        },
+        {
+          "name": "i_L",
+          "datatype": 9,
+          "description": "Measured converter output (inductor) current",
+          "unit": "A",
+          "width": 3
+        },
+        {
+          "name": "v_dc",
+          "datatype": 9,
+          "description": "DC bus voltage",
+          "unit": "V",
+          "width": 1
+        },
+        {
+          "name": "P_request",
+          "datatype": 9,
+          "description": "Active power dispatch request",
+          "unit": "W",
+          "width": 1
+        },
+        {
+          "name": "Q_request",
+          "datatype": 9,
+          "description": "Reactive power dispatch request",
+          "unit": "VAr",
+          "width": 1
+        },
+        {
+          "name": "enable",
+          "datatype": 9,
+          "description": "Controller enable gate",
+          "unit": "",
+          "width": 1
+        },
+        {
+          "name": "P_lim_high",
+          "datatype": 9,
+          "description": "Upper active power limit",
+          "unit": "W",
+          "width": 1
+        },
+        {
+          "name": "P_lim_low",
+          "datatype": 9,
+          "description": "Lower active power limit",
+          "unit": "W",
+          "width": 1
+        }
+      ],
+      "outputs": [
+        {
+          "name": "v_bridge",
+          "datatype": 9,
+          "description": "Commanded 3-phase bridge voltage",
+          "unit": "V",
+          "width": 3
+        },
+        {
+          "name": "pwm_enable",
+          "datatype": 9,
+          "description": "PWM/bridge enable gate",
+          "unit": "",
+          "width": 1
+        },
+        {
+          "name": "circuitControls_OUT.v_bridge[0]",
+          "datatype": 9,
+          "description": "Diagnostic signal: circuitControls_OUT.v_bridge[0]",
+          "unit": "",
+          "width": 1
+        },
+        {
+          "name": "circuitControls_OUT.v_bridge[1]",
+          "datatype": 9,
+          "description": "Diagnostic signal: circuitControls_OUT.v_bridge[1]",
+          "unit": "",
+          "width": 1
+        },
+        {
+          "name": "circuitControls_OUT.v_bridge[2]",
+          "datatype": 9,
+          "description": "Diagnostic signal: circuitControls_OUT.v_bridge[2]",
+          "unit": "",
+          "width": 1
+        },
+        {
+          "name": "machineModel_OUT.i_ref[0]",
+          "datatype": 9,
+          "description": "Diagnostic signal: machineModel_OUT.i_ref[0]",
+          "unit": "Amps",
+          "width": 1
+        },
+        {
+          "name": "machineModel_OUT.i_ref[1]",
+          "datatype": 9,
+          "description": "Diagnostic signal: machineModel_OUT.i_ref[1]",
+          "unit": "Amps",
+          "width": 1
+        },
+        {
+          "name": "machineModel_OUT.i_ref[2]",
+          "datatype": 9,
+          "description": "Diagnostic signal: machineModel_OUT.i_ref[2]",
+          "unit": "Amps",
+          "width": 1
+        },
+        {
+          "name": "machineModel_OUT.fRotor",
+          "datatype": 9,
+          "description": "Diagnostic signal: machineModel_OUT.fRotor",
+          "unit": "Hz",
+          "width": 1
+        },
+        {
+          "name": "acMonitor_OUT.frequency",
+          "datatype": 9,
+          "description": "Diagnostic signal: acMonitor_OUT.frequency",
+          "unit": "Hz",
+          "width": 1
+        },
+        {
+          "name": "acMonitor_OUT.Vpve.real",
+          "datatype": 9,
+          "description": "Diagnostic signal: acMonitor_OUT.Vpve.real",
+          "unit": "Volts",
+          "width": 1
+        },
+        {
+          "name": "acMonitor_OUT.Vpve.imag",
+          "datatype": 9,
+          "description": "Diagnostic signal: acMonitor_OUT.Vpve.imag",
+          "unit": "Volts",
+          "width": 1
+        },
+        {
+          "name": "acChecks_OUT.acOk",
+          "datatype": 9,
+          "description": "Diagnostic signal: acChecks_OUT.acOk",
+          "unit": "",
+          "width": 1
+        }
+      ],
+      "parameters": [
+        {
+          "name": "H",
+          "datatype": 9,
+          "description": "Inertia constant",
+          "unit": "sec",
+          "fixed": false,
+          "fixed_value": 0,
+          "group": "Control",
+          "default": 2.5,
+          "minimum": 0.1,
+          "maximum": 20.0
+        },
+        {
+          "name": "D",
+          "datatype": 9,
+          "description": "Damping gain",
+          "unit": "pu",
+          "fixed": false,
+          "fixed_value": 0,
+          "group": "Control",
+          "default": 2.0,
+          "minimum": 0.0,
+          "maximum": 10.0
+        },
+        {
+          "name": "kDroop",
+          "datatype": 9,
+          "description": "Active power droop gain",
+          "unit": "pu",
+          "fixed": false,
+          "fixed_value": 0,
+          "group": "Control",
+          "default": 1.0,
+          "minimum": 0.0,
+          "maximum": 10.0
+        }
+      ],
+      "states": {
+        "NumIntStates": 0,
+        "NumFloatStates": 0,
+        "NumDoubleStates": 0
+      }
+    },
+    "native_layout": {
+      "Signal": {
+        "size": 32,
+        "alignment": 8,
+        "offsets": {
+          "Name": 0,
+          "Description": 8,
+          "Unit": 16,
+          "DataType": 24,
+          "Width": 28
+        },
+        "fields": {
+          "Name": {
+            "offset": 0,
+            "size": 8,
+            "alignment": 8
+          },
+          "Description": {
+            "offset": 8,
+            "size": 8,
+            "alignment": 8
+          },
+          "Unit": {
+            "offset": 16,
+            "size": 8,
+            "alignment": 8
+          },
+          "DataType": {
+            "offset": 24,
+            "size": 4,
+            "alignment": 4
+          },
+          "Width": {
+            "offset": 28,
+            "size": 4,
+            "alignment": 4
+          }
+        }
+      },
+      "DefaultValue": {
+        "size": 8,
+        "alignment": 8,
+        "offsets": {
+          "Char_Val": 0,
+          "Int8_Val": 0,
+          "Uint8_Val": 0,
+          "Int16_Val": 0,
+          "Uint16_Val": 0,
+          "Int32_Val": 0,
+          "Uint32_Val": 0,
+          "Real32_Val": 0,
+          "Real64_Val": 0,
+          "Char_Ptr": 0
+        },
+        "fields": {
+          "Char_Val": {
+            "offset": 0,
+            "size": 1,
+            "alignment": 1
+          },
+          "Int8_Val": {
+            "offset": 0,
+            "size": 1,
+            "alignment": 1
+          },
+          "Uint8_Val": {
+            "offset": 0,
+            "size": 1,
+            "alignment": 1
+          },
+          "Int16_Val": {
+            "offset": 0,
+            "size": 2,
+            "alignment": 2
+          },
+          "Uint16_Val": {
+            "offset": 0,
+            "size": 2,
+            "alignment": 2
+          },
+          "Int32_Val": {
+            "offset": 0,
+            "size": 4,
+            "alignment": 4
+          },
+          "Uint32_Val": {
+            "offset": 0,
+            "size": 4,
+            "alignment": 4
+          },
+          "Real32_Val": {
+            "offset": 0,
+            "size": 4,
+            "alignment": 4
+          },
+          "Real64_Val": {
+            "offset": 0,
+            "size": 8,
+            "alignment": 8
+          },
+          "Char_Ptr": {
+            "offset": 0,
+            "size": 8,
+            "alignment": 8
+          }
+        }
+      },
+      "MinMaxValue": {
+        "size": 8,
+        "alignment": 8,
+        "offsets": {
+          "Char_Val": 0,
+          "Int8_Val": 0,
+          "Uint8_Val": 0,
+          "Int16_Val": 0,
+          "Uint16_Val": 0,
+          "Int32_Val": 0,
+          "Uint32_Val": 0,
+          "Real32_Val": 0,
+          "Real64_Val": 0
+        },
+        "fields": {
+          "Char_Val": {
+            "offset": 0,
+            "size": 1,
+            "alignment": 1
+          },
+          "Int8_Val": {
+            "offset": 0,
+            "size": 1,
+            "alignment": 1
+          },
+          "Uint8_Val": {
+            "offset": 0,
+            "size": 1,
+            "alignment": 1
+          },
+          "Int16_Val": {
+            "offset": 0,
+            "size": 2,
+            "alignment": 2
+          },
+          "Uint16_Val": {
+            "offset": 0,
+            "size": 2,
+            "alignment": 2
+          },
+          "Int32_Val": {
+            "offset": 0,
+            "size": 4,
+            "alignment": 4
+          },
+          "Uint32_Val": {
+            "offset": 0,
+            "size": 4,
+            "alignment": 4
+          },
+          "Real32_Val": {
+            "offset": 0,
+            "size": 4,
+            "alignment": 4
+          },
+          "Real64_Val": {
+            "offset": 0,
+            "size": 8,
+            "alignment": 8
+          }
+        }
+      },
+      "Parameter": {
+        "size": 64,
+        "alignment": 8,
+        "offsets": {
+          "Name": 0,
+          "GroupName": 8,
+          "Description": 16,
+          "Unit": 24,
+          "DataType": 32,
+          "FixedValue": 36,
+          "DefaultValue": 40,
+          "MinValue": 48,
+          "MaxValue": 56
+        },
+        "fields": {
+          "Name": {
+            "offset": 0,
+            "size": 8,
+            "alignment": 8
+          },
+          "GroupName": {
+            "offset": 8,
+            "size": 8,
+            "alignment": 8
+          },
+          "Description": {
+            "offset": 16,
+            "size": 8,
+            "alignment": 8
+          },
+          "Unit": {
+            "offset": 24,
+            "size": 8,
+            "alignment": 8
+          },
+          "DataType": {
+            "offset": 32,
+            "size": 4,
+            "alignment": 4
+          },
+          "FixedValue": {
+            "offset": 36,
+            "size": 4,
+            "alignment": 4
+          },
+          "DefaultValue": {
+            "offset": 40,
+            "size": 8,
+            "alignment": 8
+          },
+          "MinValue": {
+            "offset": 48,
+            "size": 8,
+            "alignment": 8
+          },
+          "MaxValue": {
+            "offset": 56,
+            "size": 8,
+            "alignment": 8
+          }
+        }
+      },
+      "ModelInfo": {
+        "size": 160,
+        "alignment": 8,
+        "offsets": {
+          "DLLInterfaceVersion": 0,
+          "ModelName": 8,
+          "ModelVersion": 16,
+          "ModelDescription": 24,
+          "GeneralInformation": 32,
+          "ModelCreated": 40,
+          "ModelCreator": 48,
+          "ModelLastModifiedDate": 56,
+          "ModelLastModifiedBy": 64,
+          "ModelModifiedComment": 72,
+          "ModelModifiedHistory": 80,
+          "FixedStepBaseSampleTime": 88,
+          "EMT_RMS_Mode": 96,
+          "NumInputPorts": 100,
+          "InputPortsInfo": 104,
+          "NumOutputPorts": 112,
+          "OutputPortsInfo": 120,
+          "NumParameters": 128,
+          "ParametersInfo": 136,
+          "NumIntStates": 144,
+          "NumFloatStates": 148,
+          "NumDoubleStates": 152
+        },
+        "fields": {
+          "DLLInterfaceVersion": {
+            "offset": 0,
+            "size": 4,
+            "alignment": 1
+          },
+          "ModelName": {
+            "offset": 8,
+            "size": 8,
+            "alignment": 8
+          },
+          "ModelVersion": {
+            "offset": 16,
+            "size": 8,
+            "alignment": 8
+          },
+          "ModelDescription": {
+            "offset": 24,
+            "size": 8,
+            "alignment": 8
+          },
+          "GeneralInformation": {
+            "offset": 32,
+            "size": 8,
+            "alignment": 8
+          },
+          "ModelCreated": {
+            "offset": 40,
+            "size": 8,
+            "alignment": 8
+          },
+          "ModelCreator": {
+            "offset": 48,
+            "size": 8,
+            "alignment": 8
+          },
+          "ModelLastModifiedDate": {
+            "offset": 56,
+            "size": 8,
+            "alignment": 8
+          },
+          "ModelLastModifiedBy": {
+            "offset": 64,
+            "size": 8,
+            "alignment": 8
+          },
+          "ModelModifiedComment": {
+            "offset": 72,
+            "size": 8,
+            "alignment": 8
+          },
+          "ModelModifiedHistory": {
+            "offset": 80,
+            "size": 8,
+            "alignment": 8
+          },
+          "FixedStepBaseSampleTime": {
+            "offset": 88,
+            "size": 8,
+            "alignment": 8
+          },
+          "EMT_RMS_Mode": {
+            "offset": 96,
+            "size": 1,
+            "alignment": 1
+          },
+          "NumInputPorts": {
+            "offset": 100,
+            "size": 4,
+            "alignment": 4
+          },
+          "InputPortsInfo": {
+            "offset": 104,
+            "size": 8,
+            "alignment": 8
+          },
+          "NumOutputPorts": {
+            "offset": 112,
+            "size": 4,
+            "alignment": 4
+          },
+          "OutputPortsInfo": {
+            "offset": 120,
+            "size": 8,
+            "alignment": 8
+          },
+          "NumParameters": {
+            "offset": 128,
+            "size": 4,
+            "alignment": 4
+          },
+          "ParametersInfo": {
+            "offset": 136,
+            "size": 8,
+            "alignment": 8
+          },
+          "NumIntStates": {
+            "offset": 144,
+            "size": 4,
+            "alignment": 4
+          },
+          "NumFloatStates": {
+            "offset": 148,
+            "size": 4,
+            "alignment": 4
+          },
+          "NumDoubleStates": {
+            "offset": 152,
+            "size": 4,
+            "alignment": 4
+          }
+        }
+      },
+      "Instance": {
+        "size": 80,
+        "alignment": 8,
+        "offsets": {
+          "ExternalInputs": 0,
+          "ExternalOutputs": 8,
+          "Parameters": 16,
+          "Time": 24,
+          "SimTool_EMT_RMS_Mode": 32,
+          "LastErrorMessage": 40,
+          "LastGeneralMessage": 48,
+          "IntStates": 56,
+          "FloatStates": 64,
+          "DoubleStates": 72
+        },
+        "fields": {
+          "ExternalInputs": {
+            "offset": 0,
+            "size": 8,
+            "alignment": 8
+          },
+          "ExternalOutputs": {
+            "offset": 8,
+            "size": 8,
+            "alignment": 8
+          },
+          "Parameters": {
+            "offset": 16,
+            "size": 8,
+            "alignment": 8
+          },
+          "Time": {
+            "offset": 24,
+            "size": 8,
+            "alignment": 8
+          },
+          "SimTool_EMT_RMS_Mode": {
+            "offset": 32,
+            "size": 1,
+            "alignment": 1
+          },
+          "LastErrorMessage": {
+            "offset": 40,
+            "size": 8,
+            "alignment": 8
+          },
+          "LastGeneralMessage": {
+            "offset": 48,
+            "size": 8,
+            "alignment": 8
+          },
+          "IntStates": {
+            "offset": 56,
+            "size": 8,
+            "alignment": 8
+          },
+          "FloatStates": {
+            "offset": 64,
+            "size": 8,
+            "alignment": 8
+          },
+          "DoubleStates": {
+            "offset": 72,
+            "size": 8,
+            "alignment": 8
+          }
+        }
+      }
+    },
+    "native_layout_scope": "ctypes declarations; not producer-library attestation",
+    "host_layouts": {
+      "inputs": {
+        "size": 96,
+        "alignment": 8,
+        "fields": [
+          {
+            "name": "v_ac",
+            "datatype": 9,
+            "width": 3,
+            "offset": 0,
+            "size": 24
+          },
+          {
+            "name": "i_L",
+            "datatype": 9,
+            "width": 3,
+            "offset": 24,
+            "size": 24
+          },
+          {
+            "name": "v_dc",
+            "datatype": 9,
+            "width": 1,
+            "offset": 48,
+            "size": 8
+          },
+          {
+            "name": "P_request",
+            "datatype": 9,
+            "width": 1,
+            "offset": 56,
+            "size": 8
+          },
+          {
+            "name": "Q_request",
+            "datatype": 9,
+            "width": 1,
+            "offset": 64,
+            "size": 8
+          },
+          {
+            "name": "enable",
+            "datatype": 9,
+            "width": 1,
+            "offset": 72,
+            "size": 8
+          },
+          {
+            "name": "P_lim_high",
+            "datatype": 9,
+            "width": 1,
+            "offset": 80,
+            "size": 8
+          },
+          {
+            "name": "P_lim_low",
+            "datatype": 9,
+            "width": 1,
+            "offset": 88,
+            "size": 8
+          }
+        ]
+      },
+      "outputs": {
+        "size": 120,
+        "alignment": 8,
+        "fields": [
+          {
+            "name": "v_bridge",
+            "datatype": 9,
+            "width": 3,
+            "offset": 0,
+            "size": 24
+          },
+          {
+            "name": "pwm_enable",
+            "datatype": 9,
+            "width": 1,
+            "offset": 24,
+            "size": 8
+          },
+          {
+            "name": "circuitControls_OUT.v_bridge[0]",
+            "datatype": 9,
+            "width": 1,
+            "offset": 32,
+            "size": 8
+          },
+          {
+            "name": "circuitControls_OUT.v_bridge[1]",
+            "datatype": 9,
+            "width": 1,
+            "offset": 40,
+            "size": 8
+          },
+          {
+            "name": "circuitControls_OUT.v_bridge[2]",
+            "datatype": 9,
+            "width": 1,
+            "offset": 48,
+            "size": 8
+          },
+          {
+            "name": "machineModel_OUT.i_ref[0]",
+            "datatype": 9,
+            "width": 1,
+            "offset": 56,
+            "size": 8
+          },
+          {
+            "name": "machineModel_OUT.i_ref[1]",
+            "datatype": 9,
+            "width": 1,
+            "offset": 64,
+            "size": 8
+          },
+          {
+            "name": "machineModel_OUT.i_ref[2]",
+            "datatype": 9,
+            "width": 1,
+            "offset": 72,
+            "size": 8
+          },
+          {
+            "name": "machineModel_OUT.fRotor",
+            "datatype": 9,
+            "width": 1,
+            "offset": 80,
+            "size": 8
+          },
+          {
+            "name": "acMonitor_OUT.frequency",
+            "datatype": 9,
+            "width": 1,
+            "offset": 88,
+            "size": 8
+          },
+          {
+            "name": "acMonitor_OUT.Vpve.real",
+            "datatype": 9,
+            "width": 1,
+            "offset": 96,
+            "size": 8
+          },
+          {
+            "name": "acMonitor_OUT.Vpve.imag",
+            "datatype": 9,
+            "width": 1,
+            "offset": 104,
+            "size": 8
+          },
+          {
+            "name": "acChecks_OUT.acOk",
+            "datatype": 9,
+            "width": 1,
+            "offset": 112,
+            "size": 8
+          }
+        ]
+      },
+      "parameters": {
+        "size": 24,
+        "alignment": 8,
+        "fields": [
+          {
+            "name": "H",
+            "datatype": 9,
+            "width": 1,
+            "offset": 0,
+            "size": 8
+          },
+          {
+            "name": "D",
+            "datatype": 9,
+            "width": 1,
+            "offset": 8,
+            "size": 8
+          },
+          {
+            "name": "kDroop",
+            "datatype": 9,
+            "width": 1,
+            "offset": 16,
+            "size": 8
+          }
+        ]
+      }
+    },
+    "execution": "completed",
+    "elapsed_seconds": 0.11
+  },
+  "cases": [
+    {
+      "case": {
+        "id": "defaults",
+        "kind": "valid"
+      },
+      "ok": true,
+      "calls": [
+        {
+          "kind": "valid",
+          "return_code": 0,
+          "error_message": null,
+          "general_message": null,
+          "diagnostic_channel": null,
+          "error_pointer_present": false,
+          "general_pointer_present": false,
+          "parameter_mutations": [],
+          "checks": [
+            {
+              "check": "return_code",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Parameters/guards",
+              "ok": true
+            },
+            {
+              "check": "Parameters/unchanged",
+              "ok": true
+            },
+            {
+              "check": "IntStates/guards",
+              "ok": true
+            },
+            {
+              "check": "IntStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/guards",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/guards",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Instance/guards",
+              "ok": true
+            },
+            {
+              "check": "instance_fields_unchanged",
+              "ok": true
+            }
+          ]
+        }
+      ],
+      "metadata_unchanged": true,
+      "recheck_policy": "same-instance",
+      "execution": "completed",
+      "elapsed_seconds": 0.093
+    },
+    {
+      "case": {
+        "id": "parameter[0]/minimum",
+        "parameter": "H",
+        "index": 0,
+        "value": 0.1,
+        "kind": "valid"
+      },
+      "ok": true,
+      "calls": [
+        {
+          "kind": "valid",
+          "return_code": 0,
+          "error_message": null,
+          "general_message": null,
+          "diagnostic_channel": null,
+          "error_pointer_present": false,
+          "general_pointer_present": false,
+          "parameter_mutations": [],
+          "checks": [
+            {
+              "check": "return_code",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Parameters/guards",
+              "ok": true
+            },
+            {
+              "check": "Parameters/unchanged",
+              "ok": true
+            },
+            {
+              "check": "IntStates/guards",
+              "ok": true
+            },
+            {
+              "check": "IntStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/guards",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/guards",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Instance/guards",
+              "ok": true
+            },
+            {
+              "check": "instance_fields_unchanged",
+              "ok": true
+            }
+          ]
+        }
+      ],
+      "metadata_unchanged": true,
+      "recheck_policy": "same-instance",
+      "execution": "completed",
+      "elapsed_seconds": 0.11
+    },
+    {
+      "case": {
+        "id": "parameter[0]/maximum",
+        "parameter": "H",
+        "index": 0,
+        "value": 20.0,
+        "kind": "valid"
+      },
+      "ok": true,
+      "calls": [
+        {
+          "kind": "valid",
+          "return_code": 0,
+          "error_message": null,
+          "general_message": null,
+          "diagnostic_channel": null,
+          "error_pointer_present": false,
+          "general_pointer_present": false,
+          "parameter_mutations": [],
+          "checks": [
+            {
+              "check": "return_code",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Parameters/guards",
+              "ok": true
+            },
+            {
+              "check": "Parameters/unchanged",
+              "ok": true
+            },
+            {
+              "check": "IntStates/guards",
+              "ok": true
+            },
+            {
+              "check": "IntStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/guards",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/guards",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Instance/guards",
+              "ok": true
+            },
+            {
+              "check": "instance_fields_unchanged",
+              "ok": true
+            }
+          ]
+        }
+      ],
+      "metadata_unchanged": true,
+      "recheck_policy": "same-instance",
+      "execution": "completed",
+      "elapsed_seconds": 0.094
+    },
+    {
+      "case": {
+        "id": "parameter[0]/below_minimum",
+        "parameter": "H",
+        "index": 0,
+        "value": 0.09999999999999999,
+        "kind": "invalid"
+      },
+      "ok": true,
+      "calls": [
+        {
+          "kind": "invalid",
+          "return_code": 2,
+          "error_message": "Parameter out of range",
+          "general_message": null,
+          "diagnostic_channel": "error",
+          "error_pointer_present": true,
+          "general_pointer_present": false,
+          "parameter_mutations": [],
+          "checks": [
+            {
+              "check": "return_code",
+              "ok": true
+            },
+            {
+              "check": "error_message",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Parameters/guards",
+              "ok": true
+            },
+            {
+              "check": "Parameters/unchanged",
+              "ok": true
+            },
+            {
+              "check": "IntStates/guards",
+              "ok": true
+            },
+            {
+              "check": "IntStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/guards",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/guards",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Instance/guards",
+              "ok": true
+            },
+            {
+              "check": "instance_fields_unchanged",
+              "ok": true
+            }
+          ]
+        },
+        {
+          "kind": "valid",
+          "return_code": 0,
+          "error_message": null,
+          "general_message": null,
+          "diagnostic_channel": null,
+          "error_pointer_present": true,
+          "general_pointer_present": false,
+          "parameter_mutations": [],
+          "checks": [
+            {
+              "check": "return_code",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Parameters/guards",
+              "ok": true
+            },
+            {
+              "check": "Parameters/unchanged",
+              "ok": true
+            },
+            {
+              "check": "IntStates/guards",
+              "ok": true
+            },
+            {
+              "check": "IntStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/guards",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/guards",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Instance/guards",
+              "ok": true
+            },
+            {
+              "check": "instance_fields_unchanged",
+              "ok": true
+            }
+          ]
+        }
+      ],
+      "metadata_unchanged": true,
+      "recheck_policy": "same-instance",
+      "execution": "completed",
+      "elapsed_seconds": 0.109
+    },
+    {
+      "case": {
+        "id": "parameter[0]/above_maximum",
+        "parameter": "H",
+        "index": 0,
+        "value": 20.000000000000004,
+        "kind": "invalid"
+      },
+      "ok": true,
+      "calls": [
+        {
+          "kind": "invalid",
+          "return_code": 2,
+          "error_message": "Parameter out of range",
+          "general_message": null,
+          "diagnostic_channel": "error",
+          "error_pointer_present": true,
+          "general_pointer_present": false,
+          "parameter_mutations": [],
+          "checks": [
+            {
+              "check": "return_code",
+              "ok": true
+            },
+            {
+              "check": "error_message",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Parameters/guards",
+              "ok": true
+            },
+            {
+              "check": "Parameters/unchanged",
+              "ok": true
+            },
+            {
+              "check": "IntStates/guards",
+              "ok": true
+            },
+            {
+              "check": "IntStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/guards",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/guards",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Instance/guards",
+              "ok": true
+            },
+            {
+              "check": "instance_fields_unchanged",
+              "ok": true
+            }
+          ]
+        },
+        {
+          "kind": "valid",
+          "return_code": 0,
+          "error_message": null,
+          "general_message": null,
+          "diagnostic_channel": null,
+          "error_pointer_present": true,
+          "general_pointer_present": false,
+          "parameter_mutations": [],
+          "checks": [
+            {
+              "check": "return_code",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Parameters/guards",
+              "ok": true
+            },
+            {
+              "check": "Parameters/unchanged",
+              "ok": true
+            },
+            {
+              "check": "IntStates/guards",
+              "ok": true
+            },
+            {
+              "check": "IntStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/guards",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/guards",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Instance/guards",
+              "ok": true
+            },
+            {
+              "check": "instance_fields_unchanged",
+              "ok": true
+            }
+          ]
+        }
+      ],
+      "metadata_unchanged": true,
+      "recheck_policy": "same-instance",
+      "execution": "completed",
+      "elapsed_seconds": 0.094
+    },
+    {
+      "case": {
+        "id": "parameter[0]/nan",
+        "parameter": "H",
+        "index": 0,
+        "value": "nan",
+        "kind": "invalid"
+      },
+      "ok": true,
+      "calls": [
+        {
+          "kind": "invalid",
+          "return_code": 2,
+          "error_message": "Parameter out of range",
+          "general_message": null,
+          "diagnostic_channel": "error",
+          "error_pointer_present": true,
+          "general_pointer_present": false,
+          "parameter_mutations": [],
+          "checks": [
+            {
+              "check": "return_code",
+              "ok": true
+            },
+            {
+              "check": "error_message",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Parameters/guards",
+              "ok": true
+            },
+            {
+              "check": "Parameters/unchanged",
+              "ok": true
+            },
+            {
+              "check": "IntStates/guards",
+              "ok": true
+            },
+            {
+              "check": "IntStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/guards",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/guards",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Instance/guards",
+              "ok": true
+            },
+            {
+              "check": "instance_fields_unchanged",
+              "ok": true
+            }
+          ]
+        },
+        {
+          "kind": "valid",
+          "return_code": 0,
+          "error_message": null,
+          "general_message": null,
+          "diagnostic_channel": null,
+          "error_pointer_present": true,
+          "general_pointer_present": false,
+          "parameter_mutations": [],
+          "checks": [
+            {
+              "check": "return_code",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Parameters/guards",
+              "ok": true
+            },
+            {
+              "check": "Parameters/unchanged",
+              "ok": true
+            },
+            {
+              "check": "IntStates/guards",
+              "ok": true
+            },
+            {
+              "check": "IntStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/guards",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/guards",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Instance/guards",
+              "ok": true
+            },
+            {
+              "check": "instance_fields_unchanged",
+              "ok": true
+            }
+          ]
+        }
+      ],
+      "metadata_unchanged": true,
+      "recheck_policy": "same-instance",
+      "execution": "completed",
+      "elapsed_seconds": 0.093
+    },
+    {
+      "case": {
+        "id": "parameter[0]/positive_infinity",
+        "parameter": "H",
+        "index": 0,
+        "value": "inf",
+        "kind": "invalid"
+      },
+      "ok": true,
+      "calls": [
+        {
+          "kind": "invalid",
+          "return_code": 2,
+          "error_message": "Parameter out of range",
+          "general_message": null,
+          "diagnostic_channel": "error",
+          "error_pointer_present": true,
+          "general_pointer_present": false,
+          "parameter_mutations": [],
+          "checks": [
+            {
+              "check": "return_code",
+              "ok": true
+            },
+            {
+              "check": "error_message",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Parameters/guards",
+              "ok": true
+            },
+            {
+              "check": "Parameters/unchanged",
+              "ok": true
+            },
+            {
+              "check": "IntStates/guards",
+              "ok": true
+            },
+            {
+              "check": "IntStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/guards",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/guards",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Instance/guards",
+              "ok": true
+            },
+            {
+              "check": "instance_fields_unchanged",
+              "ok": true
+            }
+          ]
+        },
+        {
+          "kind": "valid",
+          "return_code": 0,
+          "error_message": null,
+          "general_message": null,
+          "diagnostic_channel": null,
+          "error_pointer_present": true,
+          "general_pointer_present": false,
+          "parameter_mutations": [],
+          "checks": [
+            {
+              "check": "return_code",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Parameters/guards",
+              "ok": true
+            },
+            {
+              "check": "Parameters/unchanged",
+              "ok": true
+            },
+            {
+              "check": "IntStates/guards",
+              "ok": true
+            },
+            {
+              "check": "IntStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/guards",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/guards",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Instance/guards",
+              "ok": true
+            },
+            {
+              "check": "instance_fields_unchanged",
+              "ok": true
+            }
+          ]
+        }
+      ],
+      "metadata_unchanged": true,
+      "recheck_policy": "same-instance",
+      "execution": "completed",
+      "elapsed_seconds": 0.094
+    },
+    {
+      "case": {
+        "id": "parameter[0]/negative_infinity",
+        "parameter": "H",
+        "index": 0,
+        "value": "-inf",
+        "kind": "invalid"
+      },
+      "ok": true,
+      "calls": [
+        {
+          "kind": "invalid",
+          "return_code": 2,
+          "error_message": "Parameter out of range",
+          "general_message": null,
+          "diagnostic_channel": "error",
+          "error_pointer_present": true,
+          "general_pointer_present": false,
+          "parameter_mutations": [],
+          "checks": [
+            {
+              "check": "return_code",
+              "ok": true
+            },
+            {
+              "check": "error_message",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Parameters/guards",
+              "ok": true
+            },
+            {
+              "check": "Parameters/unchanged",
+              "ok": true
+            },
+            {
+              "check": "IntStates/guards",
+              "ok": true
+            },
+            {
+              "check": "IntStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/guards",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/guards",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Instance/guards",
+              "ok": true
+            },
+            {
+              "check": "instance_fields_unchanged",
+              "ok": true
+            }
+          ]
+        },
+        {
+          "kind": "valid",
+          "return_code": 0,
+          "error_message": null,
+          "general_message": null,
+          "diagnostic_channel": null,
+          "error_pointer_present": true,
+          "general_pointer_present": false,
+          "parameter_mutations": [],
+          "checks": [
+            {
+              "check": "return_code",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Parameters/guards",
+              "ok": true
+            },
+            {
+              "check": "Parameters/unchanged",
+              "ok": true
+            },
+            {
+              "check": "IntStates/guards",
+              "ok": true
+            },
+            {
+              "check": "IntStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/guards",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/guards",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Instance/guards",
+              "ok": true
+            },
+            {
+              "check": "instance_fields_unchanged",
+              "ok": true
+            }
+          ]
+        }
+      ],
+      "metadata_unchanged": true,
+      "recheck_policy": "same-instance",
+      "execution": "completed",
+      "elapsed_seconds": 0.094
+    },
+    {
+      "case": {
+        "id": "parameter[1]/minimum",
+        "parameter": "D",
+        "index": 1,
+        "value": 0.0,
+        "kind": "valid"
+      },
+      "ok": true,
+      "calls": [
+        {
+          "kind": "valid",
+          "return_code": 0,
+          "error_message": null,
+          "general_message": null,
+          "diagnostic_channel": null,
+          "error_pointer_present": false,
+          "general_pointer_present": false,
+          "parameter_mutations": [],
+          "checks": [
+            {
+              "check": "return_code",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Parameters/guards",
+              "ok": true
+            },
+            {
+              "check": "Parameters/unchanged",
+              "ok": true
+            },
+            {
+              "check": "IntStates/guards",
+              "ok": true
+            },
+            {
+              "check": "IntStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/guards",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/guards",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Instance/guards",
+              "ok": true
+            },
+            {
+              "check": "instance_fields_unchanged",
+              "ok": true
+            }
+          ]
+        }
+      ],
+      "metadata_unchanged": true,
+      "recheck_policy": "same-instance",
+      "execution": "completed",
+      "elapsed_seconds": 0.094
+    },
+    {
+      "case": {
+        "id": "parameter[1]/maximum",
+        "parameter": "D",
+        "index": 1,
+        "value": 10.0,
+        "kind": "valid"
+      },
+      "ok": true,
+      "calls": [
+        {
+          "kind": "valid",
+          "return_code": 0,
+          "error_message": null,
+          "general_message": null,
+          "diagnostic_channel": null,
+          "error_pointer_present": false,
+          "general_pointer_present": false,
+          "parameter_mutations": [],
+          "checks": [
+            {
+              "check": "return_code",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Parameters/guards",
+              "ok": true
+            },
+            {
+              "check": "Parameters/unchanged",
+              "ok": true
+            },
+            {
+              "check": "IntStates/guards",
+              "ok": true
+            },
+            {
+              "check": "IntStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/guards",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/guards",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Instance/guards",
+              "ok": true
+            },
+            {
+              "check": "instance_fields_unchanged",
+              "ok": true
+            }
+          ]
+        }
+      ],
+      "metadata_unchanged": true,
+      "recheck_policy": "same-instance",
+      "execution": "completed",
+      "elapsed_seconds": 0.093
+    },
+    {
+      "case": {
+        "id": "parameter[1]/below_minimum",
+        "parameter": "D",
+        "index": 1,
+        "value": -5e-324,
+        "kind": "invalid"
+      },
+      "ok": true,
+      "calls": [
+        {
+          "kind": "invalid",
+          "return_code": 2,
+          "error_message": "Parameter out of range",
+          "general_message": null,
+          "diagnostic_channel": "error",
+          "error_pointer_present": true,
+          "general_pointer_present": false,
+          "parameter_mutations": [],
+          "checks": [
+            {
+              "check": "return_code",
+              "ok": true
+            },
+            {
+              "check": "error_message",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Parameters/guards",
+              "ok": true
+            },
+            {
+              "check": "Parameters/unchanged",
+              "ok": true
+            },
+            {
+              "check": "IntStates/guards",
+              "ok": true
+            },
+            {
+              "check": "IntStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/guards",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/guards",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Instance/guards",
+              "ok": true
+            },
+            {
+              "check": "instance_fields_unchanged",
+              "ok": true
+            }
+          ]
+        },
+        {
+          "kind": "valid",
+          "return_code": 0,
+          "error_message": null,
+          "general_message": null,
+          "diagnostic_channel": null,
+          "error_pointer_present": true,
+          "general_pointer_present": false,
+          "parameter_mutations": [],
+          "checks": [
+            {
+              "check": "return_code",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Parameters/guards",
+              "ok": true
+            },
+            {
+              "check": "Parameters/unchanged",
+              "ok": true
+            },
+            {
+              "check": "IntStates/guards",
+              "ok": true
+            },
+            {
+              "check": "IntStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/guards",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/guards",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Instance/guards",
+              "ok": true
+            },
+            {
+              "check": "instance_fields_unchanged",
+              "ok": true
+            }
+          ]
+        }
+      ],
+      "metadata_unchanged": true,
+      "recheck_policy": "same-instance",
+      "execution": "completed",
+      "elapsed_seconds": 0.094
+    },
+    {
+      "case": {
+        "id": "parameter[1]/above_maximum",
+        "parameter": "D",
+        "index": 1,
+        "value": 10.000000000000002,
+        "kind": "invalid"
+      },
+      "ok": true,
+      "calls": [
+        {
+          "kind": "invalid",
+          "return_code": 2,
+          "error_message": "Parameter out of range",
+          "general_message": null,
+          "diagnostic_channel": "error",
+          "error_pointer_present": true,
+          "general_pointer_present": false,
+          "parameter_mutations": [],
+          "checks": [
+            {
+              "check": "return_code",
+              "ok": true
+            },
+            {
+              "check": "error_message",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Parameters/guards",
+              "ok": true
+            },
+            {
+              "check": "Parameters/unchanged",
+              "ok": true
+            },
+            {
+              "check": "IntStates/guards",
+              "ok": true
+            },
+            {
+              "check": "IntStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/guards",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/guards",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Instance/guards",
+              "ok": true
+            },
+            {
+              "check": "instance_fields_unchanged",
+              "ok": true
+            }
+          ]
+        },
+        {
+          "kind": "valid",
+          "return_code": 0,
+          "error_message": null,
+          "general_message": null,
+          "diagnostic_channel": null,
+          "error_pointer_present": true,
+          "general_pointer_present": false,
+          "parameter_mutations": [],
+          "checks": [
+            {
+              "check": "return_code",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Parameters/guards",
+              "ok": true
+            },
+            {
+              "check": "Parameters/unchanged",
+              "ok": true
+            },
+            {
+              "check": "IntStates/guards",
+              "ok": true
+            },
+            {
+              "check": "IntStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/guards",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/guards",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Instance/guards",
+              "ok": true
+            },
+            {
+              "check": "instance_fields_unchanged",
+              "ok": true
+            }
+          ]
+        }
+      ],
+      "metadata_unchanged": true,
+      "recheck_policy": "same-instance",
+      "execution": "completed",
+      "elapsed_seconds": 0.094
+    },
+    {
+      "case": {
+        "id": "parameter[1]/nan",
+        "parameter": "D",
+        "index": 1,
+        "value": "nan",
+        "kind": "invalid"
+      },
+      "ok": true,
+      "calls": [
+        {
+          "kind": "invalid",
+          "return_code": 2,
+          "error_message": "Parameter out of range",
+          "general_message": null,
+          "diagnostic_channel": "error",
+          "error_pointer_present": true,
+          "general_pointer_present": false,
+          "parameter_mutations": [],
+          "checks": [
+            {
+              "check": "return_code",
+              "ok": true
+            },
+            {
+              "check": "error_message",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Parameters/guards",
+              "ok": true
+            },
+            {
+              "check": "Parameters/unchanged",
+              "ok": true
+            },
+            {
+              "check": "IntStates/guards",
+              "ok": true
+            },
+            {
+              "check": "IntStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/guards",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/guards",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Instance/guards",
+              "ok": true
+            },
+            {
+              "check": "instance_fields_unchanged",
+              "ok": true
+            }
+          ]
+        },
+        {
+          "kind": "valid",
+          "return_code": 0,
+          "error_message": null,
+          "general_message": null,
+          "diagnostic_channel": null,
+          "error_pointer_present": true,
+          "general_pointer_present": false,
+          "parameter_mutations": [],
+          "checks": [
+            {
+              "check": "return_code",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Parameters/guards",
+              "ok": true
+            },
+            {
+              "check": "Parameters/unchanged",
+              "ok": true
+            },
+            {
+              "check": "IntStates/guards",
+              "ok": true
+            },
+            {
+              "check": "IntStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/guards",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/guards",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Instance/guards",
+              "ok": true
+            },
+            {
+              "check": "instance_fields_unchanged",
+              "ok": true
+            }
+          ]
+        }
+      ],
+      "metadata_unchanged": true,
+      "recheck_policy": "same-instance",
+      "execution": "completed",
+      "elapsed_seconds": 0.094
+    },
+    {
+      "case": {
+        "id": "parameter[1]/positive_infinity",
+        "parameter": "D",
+        "index": 1,
+        "value": "inf",
+        "kind": "invalid"
+      },
+      "ok": true,
+      "calls": [
+        {
+          "kind": "invalid",
+          "return_code": 2,
+          "error_message": "Parameter out of range",
+          "general_message": null,
+          "diagnostic_channel": "error",
+          "error_pointer_present": true,
+          "general_pointer_present": false,
+          "parameter_mutations": [],
+          "checks": [
+            {
+              "check": "return_code",
+              "ok": true
+            },
+            {
+              "check": "error_message",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Parameters/guards",
+              "ok": true
+            },
+            {
+              "check": "Parameters/unchanged",
+              "ok": true
+            },
+            {
+              "check": "IntStates/guards",
+              "ok": true
+            },
+            {
+              "check": "IntStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/guards",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/guards",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Instance/guards",
+              "ok": true
+            },
+            {
+              "check": "instance_fields_unchanged",
+              "ok": true
+            }
+          ]
+        },
+        {
+          "kind": "valid",
+          "return_code": 0,
+          "error_message": null,
+          "general_message": null,
+          "diagnostic_channel": null,
+          "error_pointer_present": true,
+          "general_pointer_present": false,
+          "parameter_mutations": [],
+          "checks": [
+            {
+              "check": "return_code",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Parameters/guards",
+              "ok": true
+            },
+            {
+              "check": "Parameters/unchanged",
+              "ok": true
+            },
+            {
+              "check": "IntStates/guards",
+              "ok": true
+            },
+            {
+              "check": "IntStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/guards",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/guards",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Instance/guards",
+              "ok": true
+            },
+            {
+              "check": "instance_fields_unchanged",
+              "ok": true
+            }
+          ]
+        }
+      ],
+      "metadata_unchanged": true,
+      "recheck_policy": "same-instance",
+      "execution": "completed",
+      "elapsed_seconds": 0.093
+    },
+    {
+      "case": {
+        "id": "parameter[1]/negative_infinity",
+        "parameter": "D",
+        "index": 1,
+        "value": "-inf",
+        "kind": "invalid"
+      },
+      "ok": true,
+      "calls": [
+        {
+          "kind": "invalid",
+          "return_code": 2,
+          "error_message": "Parameter out of range",
+          "general_message": null,
+          "diagnostic_channel": "error",
+          "error_pointer_present": true,
+          "general_pointer_present": false,
+          "parameter_mutations": [],
+          "checks": [
+            {
+              "check": "return_code",
+              "ok": true
+            },
+            {
+              "check": "error_message",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Parameters/guards",
+              "ok": true
+            },
+            {
+              "check": "Parameters/unchanged",
+              "ok": true
+            },
+            {
+              "check": "IntStates/guards",
+              "ok": true
+            },
+            {
+              "check": "IntStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/guards",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/guards",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Instance/guards",
+              "ok": true
+            },
+            {
+              "check": "instance_fields_unchanged",
+              "ok": true
+            }
+          ]
+        },
+        {
+          "kind": "valid",
+          "return_code": 0,
+          "error_message": null,
+          "general_message": null,
+          "diagnostic_channel": null,
+          "error_pointer_present": true,
+          "general_pointer_present": false,
+          "parameter_mutations": [],
+          "checks": [
+            {
+              "check": "return_code",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Parameters/guards",
+              "ok": true
+            },
+            {
+              "check": "Parameters/unchanged",
+              "ok": true
+            },
+            {
+              "check": "IntStates/guards",
+              "ok": true
+            },
+            {
+              "check": "IntStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/guards",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/guards",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Instance/guards",
+              "ok": true
+            },
+            {
+              "check": "instance_fields_unchanged",
+              "ok": true
+            }
+          ]
+        }
+      ],
+      "metadata_unchanged": true,
+      "recheck_policy": "same-instance",
+      "execution": "completed",
+      "elapsed_seconds": 0.094
+    },
+    {
+      "case": {
+        "id": "parameter[2]/minimum",
+        "parameter": "kDroop",
+        "index": 2,
+        "value": 0.0,
+        "kind": "valid"
+      },
+      "ok": true,
+      "calls": [
+        {
+          "kind": "valid",
+          "return_code": 0,
+          "error_message": null,
+          "general_message": null,
+          "diagnostic_channel": null,
+          "error_pointer_present": false,
+          "general_pointer_present": false,
+          "parameter_mutations": [],
+          "checks": [
+            {
+              "check": "return_code",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Parameters/guards",
+              "ok": true
+            },
+            {
+              "check": "Parameters/unchanged",
+              "ok": true
+            },
+            {
+              "check": "IntStates/guards",
+              "ok": true
+            },
+            {
+              "check": "IntStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/guards",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/guards",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Instance/guards",
+              "ok": true
+            },
+            {
+              "check": "instance_fields_unchanged",
+              "ok": true
+            }
+          ]
+        }
+      ],
+      "metadata_unchanged": true,
+      "recheck_policy": "same-instance",
+      "execution": "completed",
+      "elapsed_seconds": 0.11
+    },
+    {
+      "case": {
+        "id": "parameter[2]/maximum",
+        "parameter": "kDroop",
+        "index": 2,
+        "value": 10.0,
+        "kind": "valid"
+      },
+      "ok": true,
+      "calls": [
+        {
+          "kind": "valid",
+          "return_code": 0,
+          "error_message": null,
+          "general_message": null,
+          "diagnostic_channel": null,
+          "error_pointer_present": false,
+          "general_pointer_present": false,
+          "parameter_mutations": [],
+          "checks": [
+            {
+              "check": "return_code",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Parameters/guards",
+              "ok": true
+            },
+            {
+              "check": "Parameters/unchanged",
+              "ok": true
+            },
+            {
+              "check": "IntStates/guards",
+              "ok": true
+            },
+            {
+              "check": "IntStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/guards",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/guards",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Instance/guards",
+              "ok": true
+            },
+            {
+              "check": "instance_fields_unchanged",
+              "ok": true
+            }
+          ]
+        }
+      ],
+      "metadata_unchanged": true,
+      "recheck_policy": "same-instance",
+      "execution": "completed",
+      "elapsed_seconds": 0.093
+    },
+    {
+      "case": {
+        "id": "parameter[2]/below_minimum",
+        "parameter": "kDroop",
+        "index": 2,
+        "value": -5e-324,
+        "kind": "invalid"
+      },
+      "ok": true,
+      "calls": [
+        {
+          "kind": "invalid",
+          "return_code": 2,
+          "error_message": "Parameter out of range",
+          "general_message": null,
+          "diagnostic_channel": "error",
+          "error_pointer_present": true,
+          "general_pointer_present": false,
+          "parameter_mutations": [],
+          "checks": [
+            {
+              "check": "return_code",
+              "ok": true
+            },
+            {
+              "check": "error_message",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Parameters/guards",
+              "ok": true
+            },
+            {
+              "check": "Parameters/unchanged",
+              "ok": true
+            },
+            {
+              "check": "IntStates/guards",
+              "ok": true
+            },
+            {
+              "check": "IntStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/guards",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/guards",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Instance/guards",
+              "ok": true
+            },
+            {
+              "check": "instance_fields_unchanged",
+              "ok": true
+            }
+          ]
+        },
+        {
+          "kind": "valid",
+          "return_code": 0,
+          "error_message": null,
+          "general_message": null,
+          "diagnostic_channel": null,
+          "error_pointer_present": true,
+          "general_pointer_present": false,
+          "parameter_mutations": [],
+          "checks": [
+            {
+              "check": "return_code",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Parameters/guards",
+              "ok": true
+            },
+            {
+              "check": "Parameters/unchanged",
+              "ok": true
+            },
+            {
+              "check": "IntStates/guards",
+              "ok": true
+            },
+            {
+              "check": "IntStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/guards",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/guards",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Instance/guards",
+              "ok": true
+            },
+            {
+              "check": "instance_fields_unchanged",
+              "ok": true
+            }
+          ]
+        }
+      ],
+      "metadata_unchanged": true,
+      "recheck_policy": "same-instance",
+      "execution": "completed",
+      "elapsed_seconds": 0.11
+    },
+    {
+      "case": {
+        "id": "parameter[2]/above_maximum",
+        "parameter": "kDroop",
+        "index": 2,
+        "value": 10.000000000000002,
+        "kind": "invalid"
+      },
+      "ok": true,
+      "calls": [
+        {
+          "kind": "invalid",
+          "return_code": 2,
+          "error_message": "Parameter out of range",
+          "general_message": null,
+          "diagnostic_channel": "error",
+          "error_pointer_present": true,
+          "general_pointer_present": false,
+          "parameter_mutations": [],
+          "checks": [
+            {
+              "check": "return_code",
+              "ok": true
+            },
+            {
+              "check": "error_message",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Parameters/guards",
+              "ok": true
+            },
+            {
+              "check": "Parameters/unchanged",
+              "ok": true
+            },
+            {
+              "check": "IntStates/guards",
+              "ok": true
+            },
+            {
+              "check": "IntStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/guards",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/guards",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Instance/guards",
+              "ok": true
+            },
+            {
+              "check": "instance_fields_unchanged",
+              "ok": true
+            }
+          ]
+        },
+        {
+          "kind": "valid",
+          "return_code": 0,
+          "error_message": null,
+          "general_message": null,
+          "diagnostic_channel": null,
+          "error_pointer_present": true,
+          "general_pointer_present": false,
+          "parameter_mutations": [],
+          "checks": [
+            {
+              "check": "return_code",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Parameters/guards",
+              "ok": true
+            },
+            {
+              "check": "Parameters/unchanged",
+              "ok": true
+            },
+            {
+              "check": "IntStates/guards",
+              "ok": true
+            },
+            {
+              "check": "IntStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/guards",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/guards",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Instance/guards",
+              "ok": true
+            },
+            {
+              "check": "instance_fields_unchanged",
+              "ok": true
+            }
+          ]
+        }
+      ],
+      "metadata_unchanged": true,
+      "recheck_policy": "same-instance",
+      "execution": "completed",
+      "elapsed_seconds": 0.093
+    },
+    {
+      "case": {
+        "id": "parameter[2]/nan",
+        "parameter": "kDroop",
+        "index": 2,
+        "value": "nan",
+        "kind": "invalid"
+      },
+      "ok": true,
+      "calls": [
+        {
+          "kind": "invalid",
+          "return_code": 2,
+          "error_message": "Parameter out of range",
+          "general_message": null,
+          "diagnostic_channel": "error",
+          "error_pointer_present": true,
+          "general_pointer_present": false,
+          "parameter_mutations": [],
+          "checks": [
+            {
+              "check": "return_code",
+              "ok": true
+            },
+            {
+              "check": "error_message",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Parameters/guards",
+              "ok": true
+            },
+            {
+              "check": "Parameters/unchanged",
+              "ok": true
+            },
+            {
+              "check": "IntStates/guards",
+              "ok": true
+            },
+            {
+              "check": "IntStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/guards",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/guards",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Instance/guards",
+              "ok": true
+            },
+            {
+              "check": "instance_fields_unchanged",
+              "ok": true
+            }
+          ]
+        },
+        {
+          "kind": "valid",
+          "return_code": 0,
+          "error_message": null,
+          "general_message": null,
+          "diagnostic_channel": null,
+          "error_pointer_present": true,
+          "general_pointer_present": false,
+          "parameter_mutations": [],
+          "checks": [
+            {
+              "check": "return_code",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Parameters/guards",
+              "ok": true
+            },
+            {
+              "check": "Parameters/unchanged",
+              "ok": true
+            },
+            {
+              "check": "IntStates/guards",
+              "ok": true
+            },
+            {
+              "check": "IntStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/guards",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/guards",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Instance/guards",
+              "ok": true
+            },
+            {
+              "check": "instance_fields_unchanged",
+              "ok": true
+            }
+          ]
+        }
+      ],
+      "metadata_unchanged": true,
+      "recheck_policy": "same-instance",
+      "execution": "completed",
+      "elapsed_seconds": 0.094
+    },
+    {
+      "case": {
+        "id": "parameter[2]/positive_infinity",
+        "parameter": "kDroop",
+        "index": 2,
+        "value": "inf",
+        "kind": "invalid"
+      },
+      "ok": true,
+      "calls": [
+        {
+          "kind": "invalid",
+          "return_code": 2,
+          "error_message": "Parameter out of range",
+          "general_message": null,
+          "diagnostic_channel": "error",
+          "error_pointer_present": true,
+          "general_pointer_present": false,
+          "parameter_mutations": [],
+          "checks": [
+            {
+              "check": "return_code",
+              "ok": true
+            },
+            {
+              "check": "error_message",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Parameters/guards",
+              "ok": true
+            },
+            {
+              "check": "Parameters/unchanged",
+              "ok": true
+            },
+            {
+              "check": "IntStates/guards",
+              "ok": true
+            },
+            {
+              "check": "IntStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/guards",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/guards",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Instance/guards",
+              "ok": true
+            },
+            {
+              "check": "instance_fields_unchanged",
+              "ok": true
+            }
+          ]
+        },
+        {
+          "kind": "valid",
+          "return_code": 0,
+          "error_message": null,
+          "general_message": null,
+          "diagnostic_channel": null,
+          "error_pointer_present": true,
+          "general_pointer_present": false,
+          "parameter_mutations": [],
+          "checks": [
+            {
+              "check": "return_code",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Parameters/guards",
+              "ok": true
+            },
+            {
+              "check": "Parameters/unchanged",
+              "ok": true
+            },
+            {
+              "check": "IntStates/guards",
+              "ok": true
+            },
+            {
+              "check": "IntStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/guards",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/guards",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Instance/guards",
+              "ok": true
+            },
+            {
+              "check": "instance_fields_unchanged",
+              "ok": true
+            }
+          ]
+        }
+      ],
+      "metadata_unchanged": true,
+      "recheck_policy": "same-instance",
+      "execution": "completed",
+      "elapsed_seconds": 0.094
+    },
+    {
+      "case": {
+        "id": "parameter[2]/negative_infinity",
+        "parameter": "kDroop",
+        "index": 2,
+        "value": "-inf",
+        "kind": "invalid"
+      },
+      "ok": true,
+      "calls": [
+        {
+          "kind": "invalid",
+          "return_code": 2,
+          "error_message": "Parameter out of range",
+          "general_message": null,
+          "diagnostic_channel": "error",
+          "error_pointer_present": true,
+          "general_pointer_present": false,
+          "parameter_mutations": [],
+          "checks": [
+            {
+              "check": "return_code",
+              "ok": true
+            },
+            {
+              "check": "error_message",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Parameters/guards",
+              "ok": true
+            },
+            {
+              "check": "Parameters/unchanged",
+              "ok": true
+            },
+            {
+              "check": "IntStates/guards",
+              "ok": true
+            },
+            {
+              "check": "IntStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/guards",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/guards",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Instance/guards",
+              "ok": true
+            },
+            {
+              "check": "instance_fields_unchanged",
+              "ok": true
+            }
+          ]
+        },
+        {
+          "kind": "valid",
+          "return_code": 0,
+          "error_message": null,
+          "general_message": null,
+          "diagnostic_channel": null,
+          "error_pointer_present": true,
+          "general_pointer_present": false,
+          "parameter_mutations": [],
+          "checks": [
+            {
+              "check": "return_code",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Parameters/guards",
+              "ok": true
+            },
+            {
+              "check": "Parameters/unchanged",
+              "ok": true
+            },
+            {
+              "check": "IntStates/guards",
+              "ok": true
+            },
+            {
+              "check": "IntStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/guards",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/guards",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Instance/guards",
+              "ok": true
+            },
+            {
+              "check": "instance_fields_unchanged",
+              "ok": true
+            }
+          ]
+        }
+      ],
+      "metadata_unchanged": true,
+      "recheck_policy": "same-instance",
+      "execution": "completed",
+      "elapsed_seconds": 0.094
+    },
+    {
+      "case": {
+        "id": "null_instance",
+        "kind": "null_instance"
+      },
+      "ok": true,
+      "calls": [
+        {
+          "kind": "null_instance",
+          "return_code": 2,
+          "error_message": null,
+          "general_message": null,
+          "diagnostic_channel": null,
+          "error_pointer_present": null,
+          "general_pointer_present": null,
+          "parameter_mutations": [],
+          "checks": [
+            {
+              "check": "return_code",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Parameters/guards",
+              "ok": true
+            },
+            {
+              "check": "Parameters/unchanged",
+              "ok": true
+            },
+            {
+              "check": "IntStates/guards",
+              "ok": true
+            },
+            {
+              "check": "IntStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/guards",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/guards",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Instance/guards",
+              "ok": true
+            },
+            {
+              "check": "instance_fields_unchanged",
+              "ok": true
+            }
+          ]
+        }
+      ],
+      "metadata_unchanged": true,
+      "recheck_policy": "same-instance",
+      "execution": "completed",
+      "elapsed_seconds": 0.093
+    },
+    {
+      "case": {
+        "id": "null_parameters",
+        "kind": "null_parameters"
+      },
+      "ok": true,
+      "calls": [
+        {
+          "kind": "null_parameters",
+          "return_code": 2,
+          "error_message": null,
+          "general_message": null,
+          "diagnostic_channel": "error",
+          "error_pointer_present": false,
+          "general_pointer_present": false,
+          "parameter_mutations": [],
+          "checks": [
+            {
+              "check": "return_code",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalInputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/guards",
+              "ok": true
+            },
+            {
+              "check": "ExternalOutputs/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Parameters/guards",
+              "ok": true
+            },
+            {
+              "check": "Parameters/unchanged",
+              "ok": true
+            },
+            {
+              "check": "IntStates/guards",
+              "ok": true
+            },
+            {
+              "check": "IntStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/guards",
+              "ok": true
+            },
+            {
+              "check": "FloatStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/guards",
+              "ok": true
+            },
+            {
+              "check": "DoubleStates/unchanged",
+              "ok": true
+            },
+            {
+              "check": "Instance/guards",
+              "ok": true
+            },
+            {
+              "check": "instance_fields_unchanged",
+              "ok": true
+            }
+          ]
+        }
+      ],
+      "metadata_unchanged": true,
+      "recheck_policy": "same-instance",
+      "execution": "completed",
+      "elapsed_seconds": 0.094
+    }
+  ],
+  "skipped": [],
+  "unexecuted_case_ids": [],
+  "summary": {
+    "ok": true,
+    "complete": true,
+    "cases_executed": 24,
+    "cases_failed": 0,
+    "checks_executed": 600,
+    "checks_failed": 0,
+    "elapsed_seconds": 2.422
+  }
+}

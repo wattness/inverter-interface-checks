@@ -10,6 +10,26 @@ public IEEE/CIGRE 1.1 header. Passing a selected adapter does not establish CIGR
 TB958 conformance, electrical suitability or simulator compatibility. This
 version is `0.2.3`; the original `v0.1.0` release and its reports remain separate.
 
+## Report explorer and installation
+
+[Open the report Space](https://huggingface.co/spaces/wattness/inverter-interface-checks)
+to inspect the retained OpenIBR comparison or read your own report locally in the
+browser. The Space reads reports; native checks run on your machine.
+
+Use Python 3.12 as a starting point. On macOS or Linux:
+
+```sh
+python3.12 -m venv .venv
+.venv/bin/python -m pip install https://github.com/wattness/inverter-interface-checks/releases/download/v0.2.3/inverter_interface_checks-0.2.3-py3-none-any.whl
+.venv/bin/python -m inverter_interface_checks --library ./GFM_Battery_OpenIBR.so --adapter openibr-1.1 --output report.json
+```
+
+Use .dylib for your macOS build. On Windows, create the environment with
+py -3.12 -m venv .venv and invoke .venv\Scripts\python.exe; use your library's
+.dll path. The Space's Run locally tab provides both command sets and the exact
+released wheel. Choose a new report filename. The package has no runtime
+package dependencies.
+
 ## Run
 
 Use Python 3.10 or later from this checkout:

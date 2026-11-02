@@ -1,0 +1,11 @@
+{
+  "name": "inverter-interface-report-space",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/core.test.mjs && node tests/browser.test.mjs"
+  },
+  "devDependencies": {
+    "playwright": "1.60.0"
+  }
+}

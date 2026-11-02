@@ -1,0 +1,95 @@
+{
+  "schema": "inverter-interface-space/1",
+  "scope": "Recorded metadata and parameter validation; local report display",
+  "checker": {
+    "version": "0.2.3",
+    "commit": "6b86747cd95bb0d163a8018dd53822b350511706",
+    "repository": "https://github.com/wattness/inverter-interface-checks",
+    "release": "https://github.com/wattness/inverter-interface-checks/releases/tag/v0.2.3",
+    "wheel": {
+      "path": "downloads/inverter_interface_checks-0.2.3-py3-none-any.whl",
+      "sha256": "1580a8b1044971c38a846930305946484183333074caa7a14ed693cfbcde59e6",
+      "bytes": 32136
+    }
+  },
+  "sources": {
+    "original": {
+      "repository": "https://github.com/HeronPower/OpenIBR",
+      "commit": "5e2396cef8e57765c6a8fefe34fc379c3a60c163"
+    },
+    "fixed": {
+      "repository": "https://github.com/wattness/OpenIBR",
+      "commit": "0489b0f2c5cea392f6b6b0743dae43a630732e58",
+      "pull_request": "https://github.com/HeronPower/OpenIBR/pull/14"
+    }
+  },
+  "native_ci": "https://github.com/wattness/inverter-interface-checks/actions/runs/41331699131",
+  "platforms": [
+    {
+      "id": "linux-x64",
+      "label": "Linux x64",
+      "original": {
+        "path": "reports/linux-x64-original.json",
+        "sha256": "f76cf2d9f22b15a35c13fbd2206cc42a91e7b0e9a7f8bb6317791a0654e2cb00",
+        "bytes": 139381,
+        "library_sha256": "34aed6900b43feee2c2afec2bdc1d787fc0ce8c5dfff5dcdd39be02db5ea8330"
+      },
+      "fixed": {
+        "path": "reports/linux-x64-fixed.json",
+        "sha256": "32867af23cd8923010761413c1f60af4f919b4f6038f93af8dad7389234fcac5",
+        "bytes": 139719,
+        "library_sha256": "57847cefe0268c934e632771208a8f2e78263a21e5ae244d664f44395c6f8883"
+      }
+    },
+    {
+      "id": "macos-arm64",
+      "label": "macOS arm64",
+      "original": {
+        "path": "reports/macos-arm64-original.json",
+        "sha256": "a83dd8e122b0f8bfcfda53243835933436c46fa9ee5143ecbe1ccc0dc9444deb",
+        "bytes": 139705,
+        "library_sha256": "7f11cf51f74bac4cf357d5e17f2daae107c3e1db9cdd86739a64f441bc32fe54"
+      },
+      "fixed": {
+        "path": "reports/macos-arm64-fixed.json",
+        "sha256": "fc0bfc173ce18820a462fed0d7cf592738aa659dbb76b5b8e3795be5afc5dce2",
+        "bytes": 140046,
+        "library_sha256": "94eecea485373f50e7e2e650d7308825f012b35764f5eac0fcc3ac5cf04c7d50"
+      }
+    },
+    {
+      "id": "windows-x64",
+      "label": "Windows x64",
+      "original": {
+        "path": "reports/windows-x64-original.json",
+        "sha256": "d14c207e58417ee655ef473aa2f17b98333f19ed2f535b6c8dbce2d9e3f7ad38",
+        "bytes": 144580,
+        "library_sha256": "2cb67720de4d8830147d86169119ae31870dc40f89714df81bcad46e74ebfb2e"
+      },
+      "fixed": {
+        "path": "reports/windows-x64-fixed.json",
+        "sha256": "254f4b5f8099ff7424f245c512b9ef20e0482234b9dcef381bfa10aef898442a",
+        "bytes": 144928,
+        "library_sha256": "ae49bbfd0c7dea85c7149d5d9848cc7f2f1f44789715b59f7a4ad9d4f1d2fa24"
+      }
+    }
+  ],
+  "expected_comparison": {
+    "cases": 24,
+    "changed_cases": 3,
+    "unchanged_cases": 21,
+    "changed_ids": [
+      "parameter[0]/nan",
+      "parameter[1]/nan",
+      "parameter[2]/nan"
+    ],
+    "case_comparison_excludes": [
+      "elapsed_seconds"
+    ]
+  },
+  "native_validation": {
+    "path": "reports/native-validation-0.2.3.json",
+    "sha256": "603872725785265cfe31332f4f9d10162b1f1d511d8149912668a69f68c92f52",
+    "bytes": 2346
+  }
+}

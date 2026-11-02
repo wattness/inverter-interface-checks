@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Explore recorded OpenIBR parameter checks and inspect an inverter interface report locally in your browser.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; worker-src 'self'; img-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
+  <meta name="referrer" content="no-referrer">
+  <title>Inverter interface reports · Wattness</title>
+  <link rel="stylesheet" href="./style.css">
+  <script type="module" src="./app.mjs"></script>
+</head>
+<body>
+  <a class="skip" href="#workspace">Skip to reports</a>
+  <div class="wrap">
+    <header>
+      <div class="masthead">
+        <a class="brand" href="https://github.com/wattness" rel="noopener noreferrer">Wattness</a>
+        <span class="edition">Open tools / Inverter interfaces</span>
+        <a class="source-link" href="https://github.com/wattness/inverter-interface-checks" rel="noopener noreferrer">Source</a>
+      </div>
+      <h1>Inspect an inverter interface</h1>
+      <p class="intro">Explore recorded OpenIBR parameter checks. Open a report from your own model, entirely in your browser.</p>
+    </header>
+
+    <main id="workspace">
+      <div class="tabs" role="tablist" aria-label="Report workspace">
+        <button id="tab-comparison" role="tab" aria-selected="true" aria-controls="pane-comparison" type="button">Release comparison</button>
+        <button id="tab-report" role="tab" aria-selected="false" aria-controls="pane-report" tabindex="-1" type="button">Your report</button>
+        <button id="tab-local" role="tab" aria-selected="false" aria-controls="pane-local" tabindex="-1" type="button">Run locally</button>
+      </div>
+
+      <section id="pane-comparison" role="tabpanel" aria-labelledby="tab-comparison">
+        <div class="toolbar">
+          <div>
+            <h2>OpenIBR parameter validator</h2>
+            <p class="muted">Original build and proposed correction · checker v0.2.3</p>
+          </div>
+          <label class="select-label" for="platform">Recorded platform
+            <select id="platform">
+              <option value="linux-x64">Linux x64</option>
+              <option value="macos-arm64">macOS arm64</option>
+              <option value="windows-x64">Windows x64</option>
+            </select>
+          </label>
+        </div>
+        <p id="comparison-loading" class="notice" role="status">Loading retained release reports…</p>
+        <p id="comparison-error" class="error-box" role="alert" hidden></p>
+        <div id="comparison-content" hidden>
+          <div class="metrics" aria-label="Recorded comparison">
+            <div><strong id="changed-count">—</strong><span>NaN cases corrected</span></div>
+            <div><strong id="unchanged-count">—</strong><span>Control cases unchanged</span></div>
+            <div><strong id="case-count">—</strong><span>Cases in each build</span></div>
+          </div>
+          <div class="finding">
+            <span class="eyebrow">The finding</span>
+            <p>The original validator accepts NaN for inertia, damping and droop parameters. The proposed correction rejects those inputs. The other 21 cases match.</p>
+            <p class="muted small">NaN means “not a number.” Both less-than and greater-than comparisons with NaN are false, so a range check alone can miss it.</p>
+          </div>
+          <div class="table-toolbar">
+            <p class="small muted">Select a case to inspect its calls and diagnostics.</p>
+            <label class="inline-label" for="case-filter">Show
+              <select id="case-filter">
+                <option value="changed">Changed cases</option>
+                <option value="all">All cases</option>
+                <option value="unchanged">Unchanged controls</option>
+              </select>
+            </label>
+          </div>
+          <div class="table-wrap">
+            <table id="comparison-table">
+              <caption class="sr-only">Recorded original and proposed OpenIBR parameter checks</caption>
+              <thead><tr><th scope="col">Parameter / input</th><th scope="col">Original build</th><th scope="col">Proposed correction</th><th scope="col">Observation</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <section id="comparison-detail" class="detail" aria-label="Selected case" hidden></section>
+          <div class="provenance">
+            <div><span class="eyebrow">Pinned sources</span><p><a id="original-source" rel="noopener noreferrer">Original</a><span class="separator">/</span><a id="fixed-source" rel="noopener noreferrer">Proposed correction</a><span class="separator">/</span><a href="https://github.com/HeronPower/OpenIBR/pull/14" rel="noopener noreferrer">Upstream PR #14</a></p></div>
+            <div class="download-row">
+              <button id="download-original" type="button" class="button">Original report</button>
+              <button id="download-fixed" type="button" class="button">Corrected report</button>
+            </div>
+          </div>
+          <p class="small muted">These are retained software checks from pinned builds. The proposed correction is a separate source revision. Case comparison excludes recorded elapsed time.</p>
+          <details class="metadata-block"><summary>Model metadata and report identities</summary><div id="comparison-metadata"></div></details>
+        </div>
+      </section>
+
+      <section id="pane-report" role="tabpanel" aria-labelledby="tab-report" hidden>
+        <h2>Open your report</h2>
+        <p class="muted">Choose JSON generated by the local checker. It stays in this tab; opening it does not rerun the model.</p>
+        <div id="drop-zone" class="drop-zone">
+          <p>Drop a JSON report here</p>
+          <label class="button primary file-label" for="report-file">Choose a report</label>
+          <input id="report-file" class="file-input" type="file" accept=".json,application/json" aria-describedby="file-limits">
+          <p id="file-limits" class="small muted">Report version 2 · up to 2 MB</p>
+        </div>
+        <details class="paste-block">
+          <summary>Paste report JSON</summary>
+          <label class="sr-only" for="report-text">Report JSON</label>
+          <textarea id="report-text" rows="7" maxlength="2097152" spellcheck="false" placeholder="Paste the complete report JSON"></textarea>
+          <button id="inspect-text" type="button" class="button primary">Inspect JSON</button>
+        </details>
+        <p id="report-loading" class="notice" role="status" hidden>Reading your report…</p>
+        <p id="report-error" class="error-box" role="alert" hidden></p>
+        <div id="report-content" hidden>
+          <div class="toolbar report-heading">
+            <div><span class="eyebrow">Locally opened file</span><h3 id="report-name"></h3><p id="report-outcome"></p></div>
+            <div class="download-row"><button id="download-user" class="button" type="button">Download report</button><button id="clear-report" class="button" type="button">Clear</button></div>
+          </div>
+          <div id="report-metrics" class="metrics"></div>
+          <p id="report-scope" class="small muted"></p>
+          <p id="report-extra" class="notice" hidden></p>
+          <div class="table-wrap">
+            <table id="report-table"><caption class="sr-only">Cases reported in your file</caption>
+              <thead><tr><th scope="col">Case</th><th scope="col">Observed return</th><th scope="col">Reported outcome</th><th scope="col">Checks</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <section id="report-detail" class="detail" aria-label="Selected report case" hidden></section>
+          <details class="metadata-block"><summary>Model metadata and report identities</summary><div id="report-metadata"></div></details>
+          <p class="small muted">The viewer checks the report’s structure and internal counts. Its native observations are supplied by the file’s producer.</p>
+        </div>
+      </section>
+
+      <section id="pane-local" role="tabpanel" aria-labelledby="tab-local" hidden>
+        <h2>Check a model on your machine</h2>
+        <p class="muted">The released Python checker calls a trusted compiled library’s metadata and parameter validator. Use an isolated Python environment; Python 3.12 is the recommended starting point.</p>
+        <div class="local-download">
+          <a id="download-wheel" class="button primary" download>Download checker v0.2.3</a>
+          <p class="small muted">Python wheel · no runtime package dependencies</p>
+          <p class="hash-line"><span>SHA-256</span><code id="wheel-hash"></code></p>
+        </div>
+        <div class="toolbar"><h3>Install and write a report</h3>
+          <label class="select-label" for="command-platform">Your operating system
+            <select id="command-platform"><option value="unix">macOS / Linux</option><option value="windows">Windows</option></select>
+          </label>
+        </div>
+        <pre id="local-commands"></pre>
+        <button id="copy-commands" class="button" type="button">Copy commands</button>
+        <p id="copy-status" class="small muted" role="status"></p>
+        <p class="small muted">Replace the example library path with your own trusted OpenIBR build. Use .dylib on macOS, .so on Linux and .dll on Windows. Choose a new output filename, then open that JSON in <button id="go-report" type="button" class="text-button">Your report</button>.</p>
+        <div class="method">
+          <h3>What the checker observes</h3>
+          <ul><li>Public exports, model metadata, parameter bounds and selected nonfinite policies.</li><li>Validator returns, active diagnostics, same-instance rechecks and protected buffer bytes.</li><li>Library, adapter and checker identities, with explicitly supplied build evidence.</li></ul>
+          <p><a href="https://github.com/wattness/inverter-interface-checks#checks" rel="noopener noreferrer">Read the checks and adapter contract</a></p>
+          <p class="small muted">Only metadata and parameter validation are called. The electrical model is not initialized or stepped. Run native libraries whose code and provenance you trust.</p>
+        </div>
+      </section>
+    </main>
+    <footer>
+      <p>Scope: model metadata and parameter validation.</p>
+      <p><a href="https://github.com/wattness/inverter-interface-checks/releases/tag/v0.2.3" rel="noopener noreferrer">Release v0.2.3</a><span class="separator">/</span><a href="https://github.com/wattness/inverter-interface-checks/actions/runs/41331699131" rel="noopener noreferrer">Retained native evidence</a><span class="separator">/</span><a href="./README.md">Method and licenses</a></p>
+    </footer>
+    <noscript><p class="error-box">Enable JavaScript to view reports. The source and released checker are linked above.</p></noscript>
+  </div>
+</body>
+</html>
