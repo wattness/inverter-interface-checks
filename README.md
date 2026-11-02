@@ -12,7 +12,7 @@ version is `0.2.3`; the original `v0.1.0` release and its reports remain separat
 
 ## Report explorer and installation
 
-[Open the report Space](https://huggingface.co/spaces/wattness/inverter-interface-checks)
+[Open the report Space](https://huggingface.co/spaces/wattness/inverter-interface-reports)
 to inspect the retained OpenIBR comparison or read your own report locally in the
 browser. The Space reads reports; native checks run on your machine.
 
