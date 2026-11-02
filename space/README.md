@@ -73,6 +73,11 @@ change the Python checker's adapter, report or native-validation contracts.
 
 ## Run locally
 
+The current download is [checker v0.2.4](https://github.com/wattness/inverter-interface-checks/releases/tag/v0.2.4).
+It enforces a 64-level JSON input limit before decoding across supported Python
+versions. The retained comparison reports and their producing v0.2.3 wheel
+remain unchanged; manifest.installation identifies the current download separately.
+
 Use Python 3.12 in a virtual environment. Download the released wheel from the
 Run locally tab, or install it from its pinned GitHub release URL. The page
 provides commands for Windows and macOS/Linux. Supply your own trusted compiled
@@ -93,7 +98,7 @@ The Space source is maintained in
 - index.html, style.css and app.mjs provide the interface.
 - report-worker.mjs and report-core.mjs parse and describe reports.
 - reports/ preserves six native reports and the released validation summary.
-- downloads/ preserves the released Python wheel.
+- downloads/ preserves the v0.2.3 producing wheel and the current v0.2.4 download.
 - manifest.json records the artifact and source pins.
 - verify_assets.py checks byte identities and compares the original controls
   independently, without loading a native library.

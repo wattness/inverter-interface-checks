@@ -91,5 +91,15 @@
     "path": "reports/native-validation-0.2.3.json",
     "sha256": "603872725785265cfe31332f4f9d10162b1f1d511d8149912668a69f68c92f52",
     "bytes": 2346
+  },
+  "installation": {
+    "version": "0.2.4",
+    "commit": "5ec2849d23b543a91d4effd21bbd24515d2d9114",
+    "release": "https://github.com/wattness/inverter-interface-checks/releases/tag/v0.2.4",
+    "wheel": {
+      "path": "downloads/inverter_interface_checks-0.2.4-py3-none-any.whl",
+      "bytes": 32560,
+      "sha256": "9fb277f98587475d4cef8325432a86c6a1d7579edf397e30eb178feb2423e637"
+    }
   }
 }

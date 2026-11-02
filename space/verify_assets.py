@@ -28,6 +28,14 @@ def verify(root):
         return data
 
     asset(checker["wheel"])
+    installation = manifest["installation"]
+    assert installation["version"] == "0.2.4"
+    assert installation["commit"] == "5ec2849d23b543a91d4effd21bbd24515d2d9114"
+    assert installation["wheel"]["sha256"] == "9fb277f98587475d4cef8325432a86c6a1d7579edf397e30eb178feb2423e637"
+    asset(installation["wheel"])
+    with zipfile.ZipFile(root / installation["wheel"]["path"]) as current:
+        metadata = current.read("inverter_interface_checks-0.2.4.dist-info/METADATA").decode("utf-8")
+        assert "Version: 0.2.4\n" in metadata
     validation = json.loads(asset(manifest["native_validation"]))
     assert validation["checker_commit"] == checker["commit"]
     assert validation["electrical_initialization_or_stepping"] is False
@@ -63,7 +71,8 @@ def verify(root):
                     assert original["ok"] is False and fixed["ok"] is True
             assert changed == manifest["expected_comparison"]["changed_ids"]
             results.append({"platform": platform["id"], "changed": len(changed), "unchanged": 24 - len(changed)})
-    return {"ok": True, "method": "Retained artifact bytes; no native execution", "platforms": results}
+    return {"ok": True, "method": "Retained artifact bytes; no native execution",
+            "current_checker": installation["version"], "platforms": results}
 
 
 if __name__ == "__main__":

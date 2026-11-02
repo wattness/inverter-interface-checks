@@ -307,7 +307,7 @@ function download(bytes, name) {
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 function renderCommands() {
-  const wheel = "https://github.com/wattness/inverter-interface-checks/releases/download/v0.2.3/inverter_interface_checks-0.2.3-py3-none-any.whl";
+  const wheel = "https://github.com/wattness/inverter-interface-checks/releases/download/v0.2.4/inverter_interface_checks-0.2.4-py3-none-any.whl";
   const windows = byId("command-platform").value === "windows";
   const python = windows ? ".venv\\Scripts\\python.exe" : ".venv/bin/python";
   byId("local-commands").textContent = [
@@ -371,6 +371,7 @@ async function boot() {
   if (!response.ok) throw new Error("The release manifest is unavailable.");
   manifest = await response.json();
   if (manifest.schema !== "inverter-interface-space/1" || manifest.checker.version !== "0.2.3"
+    || manifest.installation?.version !== "0.2.4"
     || manifest.platforms.map((p) => p.id).join(",") !== "linux-x64,macos-arm64,windows-x64") {
     throw new Error("Unsupported release manifest.");
   }
@@ -381,8 +382,8 @@ async function boot() {
     byId(id + "-source").href = source.repository + "/commit/" + source.commit;
     byId(id + "-source").textContent = (id === "original" ? "Original " : "Proposed ") + source.commit.slice(0, 7);
   }
-  byId("download-wheel").href = "./" + manifest.checker.wheel.path;
-  byId("wheel-hash").textContent = manifest.checker.wheel.sha256;
+  byId("download-wheel").href = "./" + manifest.installation.wheel.path;
+  byId("wheel-hash").textContent = manifest.installation.wheel.sha256;
   await loadComparison();
 }
 boot().catch((error) => {

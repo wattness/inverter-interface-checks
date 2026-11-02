@@ -17,7 +17,7 @@ const fixed = await readFile(path.join(root, manifest.platforms[0].fixed.path));
 const allowed = new Set([
   "index.html", "style.css", "app.mjs", "report-core.mjs", "report-worker.mjs", "manifest.json", "README.md",
   ...manifest.platforms.flatMap((p) => [p.original.path, p.fixed.path]),
-  manifest.checker.wheel.path, manifest.native_validation.path,
+  manifest.checker.wheel.path, manifest.native_validation.path, manifest.installation.wheel.path,
 ]);
 const types = { ".html": "text/html", ".css": "text/css", ".mjs": "text/javascript", ".json": "application/json", ".md": "text/plain" };
 const server = createServer(async (req, res) => {
@@ -170,11 +170,12 @@ try {
       await page.locator("#command-platform").selectOption("windows");
       assert.match(await page.locator("#local-commands").innerText(), /py -3.12/);
       assert.match(await page.locator("#local-commands").innerText(), /GFM_Battery_OpenIBR.dll/);
-      assert.equal(await page.locator("#wheel-hash").innerText(), manifest.checker.wheel.sha256);
+      assert.match(await page.locator("#local-commands").innerText(), /v0\.2\.4\/inverter_interface_checks-0\.2\.4-/);
+      assert.equal(await page.locator("#wheel-hash").innerText(), manifest.installation.wheel.sha256);
       const downloading = page.waitForEvent("download");
       await page.locator("#download-wheel").click();
       const bytes = await readFile(await (await downloading).path());
-      assert.equal(createHash("sha256").update(bytes).digest("hex"), manifest.checker.wheel.sha256);
+      assert.equal(createHash("sha256").update(bytes).digest("hex"), manifest.installation.wheel.sha256);
       await page.keyboard.press("Home");
       await page.getByRole("tab", { name: "Release comparison" }).click();
       assert.equal(await page.locator("#pane-comparison").isVisible(), true);

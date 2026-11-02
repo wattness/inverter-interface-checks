@@ -36,7 +36,7 @@ for (const platform of manifest.platforms) {
 }
 
 test("released downloads retain their digests", async () => {
-  for (const asset of [manifest.checker.wheel, manifest.native_validation]) {
+  for (const asset of [manifest.checker.wheel, manifest.native_validation, manifest.installation.wheel]) {
     const bytes = await readFile(new URL(asset.path, root));
     assert.equal(bytes.length, asset.bytes);
     assert.equal(createHash("sha256").update(bytes).digest("hex"), asset.sha256);
