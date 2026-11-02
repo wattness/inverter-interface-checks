@@ -8,7 +8,7 @@ header-layout probe.
 The adapters implement the native 64-bit cdecl layout exposed by OpenIBR's
 public IEEE/CIGRE 1.1 header. Passing a selected adapter does not establish CIGRE
 TB958 conformance, electrical suitability or simulator compatibility. This
-version is `0.2.3`; the original `v0.1.0` release and its reports remain separate.
+version is `0.2.4`; earlier releases and their reports remain separate.
 
 ## Report explorer and installation
 
@@ -20,7 +20,7 @@ Use Python 3.12 as a starting point. On macOS or Linux:
 
 ```sh
 python3.12 -m venv .venv
-.venv/bin/python -m pip install https://github.com/wattness/inverter-interface-checks/releases/download/v0.2.3/inverter_interface_checks-0.2.3-py3-none-any.whl
+.venv/bin/python -m pip install https://github.com/wattness/inverter-interface-checks/releases/download/v0.2.4/inverter_interface_checks-0.2.4-py3-none-any.whl
 .venv/bin/python -m inverter_interface_checks --library ./GFM_Battery_OpenIBR.so --adapter openibr-1.1 --output report.json
 ```
 
@@ -118,6 +118,9 @@ Unknown fields and unsupported layouts are rejected. Integer return declarations
 must be JSON integers; booleans and floating-point lookalikes are invalid.
 Adapter and supplied receipt JSON reject duplicate object keys and nonfinite
 numbers before loading the library. Worker-result JSON follows the same rule.
+JSON is limited to 64 nested arrays or objects before decoding, independently
+of Python's recursion limits. A root container counts as level one; brackets
+and braces inside strings do not count. Inputs at the limit still undergo schema validation.
 The attached build-receipt digest covers the exact bytes decoded, including
 when the file changes afterward.
 

@@ -112,6 +112,56 @@ class JSONInputs(unittest.TestCase):
                 path = self.write("nested-receipt.json", text)
                 self.assert_before_worker("JSON nesting", **{field: path})
 
+    def nested_field(self, document, depth, kind):
+        openings, closings = [], []
+        for index in range(depth - 1):
+            array = kind == "array" or (kind == "mixed" and index % 2 == 0)
+            openings.append("[" if array else '{"child":')
+            closings.append("]" if array else "}")
+        nested = "".join(openings) + "0" + "".join(reversed(closings))
+        return json.dumps(document)[:-1] + ', "nested":' + nested + '}'
+
+    def test_adapter_depth_limit_precedes_unchanged_schema_validation(self):
+        adapter = load_adapter("ieee-cigre-1.1")[0]
+        for kind in ("array", "object", "mixed"):
+            for depth in (63, 64, 65):
+                with self.subTest(kind=kind, depth=depth):
+                    text = self.nested_field(adapter, depth, kind)
+                    path = self.write("nested-adapter.json", text)
+                    error = "JSON nesting" if depth == 65 else "adapter has unknown fields"
+                    self.assert_before_worker(error, adapter=str(path))
+
+    def test_receipt_depth_boundary_and_captured_bytes(self):
+        for field, receipt in (("build_receipt", self.build_receipt()),
+                               ("abi_probe", self.probe_receipt())):
+            for kind in ("array", "object", "mixed"):
+                for depth in (63, 64):
+                    with self.subTest(field=field, kind=kind, depth=depth):
+                        text = self.nested_field(receipt, depth, kind)
+                        path = self.write("boundary-receipt.json", text)
+                        with (
+                            patch.object(cli, "run_worker", return_value={"ok": False,
+                                                                         "execution": "passive"}) as worker,
+                            patch.object(cli, "compare_native_probe", return_value={"matches": True}) as compare,
+                        ):
+                            report = cli.inspect(self.arguments(**{field: path}))
+                        worker.assert_called_once()
+                        if field == "abi_probe":
+                            compare.assert_called_once()
+                            attached = report["identity"]["abi_probe"]
+                            self.assertEqual(attached["record"], json.loads(text))
+                            digest = attached["sha256"]
+                        else:
+                            compare.assert_not_called()
+                            self.assertEqual(report["identity"]["build_receipt"], json.loads(text))
+                            digest = report["identity"]["build_receipt_sha256"]
+                        self.assertEqual(digest, hashlib.sha256(path.read_bytes()).hexdigest())
+                with self.subTest(field=field, kind=kind, depth=65):
+                    path = self.write("overdeep-receipt.json", self.nested_field(receipt, 65, kind))
+                    with patch.object(cli, "compare_native_probe") as compare:
+                        self.assert_before_worker("JSON nesting", **{field: path})
+                        compare.assert_not_called()
+
     def test_repeated_names_in_distinct_objects_are_allowed(self):
         receipt = self.build_receipt()
         receipt["sources"] = [{"name": "first", "sha256": "a" * 64},
@@ -175,6 +225,21 @@ class JSONInputs(unittest.TestCase):
         result = self.emit_worker_packet(payload)
         self.assertFalse(result["ok"])
         self.assertEqual(result["execution"], "invalid_worker_result")
+
+    def test_worker_depth_boundary(self):
+        for kind in ("array", "object", "mixed"):
+            for depth in (63, 64, 65):
+                with self.subTest(kind=kind, depth=depth):
+                    payload = self.nested_field({"ok": True}, depth, kind)
+                    result = self.emit_worker_packet(payload)
+                    if depth == 65:
+                        self.assertFalse(result["ok"])
+                        self.assertEqual(result["execution"], "invalid_worker_result")
+                        self.assertIn("JSON nesting", result["detail"])
+                    else:
+                        self.assertTrue(result["ok"])
+                        self.assertEqual(result["execution"], "completed")
+                        self.assertEqual(result["nested"], json.loads(payload)["nested"])
 
     def test_ordinary_worker_packet_is_preserved(self):
         result = self.emit_worker_packet('{"ok":true,"detail":"passive","measurement":1.25}')
